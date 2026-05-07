@@ -1,0 +1,12 @@
+# ROS2 编译与缓存文件
+build/
+install/
+log/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# IDE 配置
+.vscode/
+.idea/
