@@ -38,94 +38,67 @@ class PatrolNode(BasicNavigator):
         """
         初始化机器人位姿
         """
-        # 从参数获取初始化点
         self.initial_point_ = self.get_parameter('initial_point').value
-        # 合成位姿并进行初始化
         self.setInitialPose(self.get_pose_by_xyyaw(
             self.initial_point_[0], self.initial_point_[1], self.initial_point_[2]))
-        # 等待直到导航激活
         self.waitUntilNav2Active()
 
-    def get_target_points(self):
+    def get_target_points_list(self):
         """
-        通过参数值获取目标点集合        
+        一次性获取所有目标点，并打包成 PoseStamped 列表
         """
-        points = []
+        poses = []
         self.target_points_ = self.get_parameter('target_points').value
         for index in range(int(len(self.target_points_)/3)):
             x = self.target_points_[index*3]
             y = self.target_points_[index*3+1]
             yaw = self.target_points_[index*3+2]
-            points.append([x, y, yaw])
-            self.get_logger().info(f'解析到目标点: {index}->({x}, {y}, {yaw})')
-        return points
+            
+            # 将每个坐标直接转化为目标位姿
+            target_pose = self.get_pose_by_xyyaw(x, y, yaw)
+            poses.append(target_pose)
+            
+            self.get_logger().info(f'记录途径点: {index}->({x}, {y}, {yaw})')
+            
+        return poses
 
-    def nav_to_pose(self, target_pose):
-        """
-        导航到指定位姿
-        """
-        self.waitUntilNav2Active()
-        result = self.goToPose(target_pose)
-        while not self.isTaskComplete():
-            feedback = self.getFeedback()
-            if feedback:
-                # 降低打印频率，防止终端被刷屏卡死
-                if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 5 == 0:
-                    self.get_logger().info(f'预计: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s 后到达')
-        
-        # 最终结果判断
-        result = self.getResult()
-        if result == TaskResult.SUCCEEDED:
-            self.get_logger().info('导航结果：成功')
-        elif result == TaskResult.CANCELED:
-            self.get_logger().warn('导航结果：被取消')
-        elif result == TaskResult.FAILED:
-            self.get_logger().error('导航结果：失败 (请检查代价地图或障碍物)')
-        else:
-            self.get_logger().error('导航结果：返回状态无效')
-
-    def get_current_pose(self):
-        """
-        通过TF获取当前位姿
-        """
-        while rclpy.ok():
-            try:
-                # 【老师傅重点修复】：改为 base_link，与你的 Nav2 配置文件彻底对齐！
-                tf = self.buffer_.lookup_transform(
-                    'map', 'base_link', rclpy.time.Time(seconds=0), rclpy.time.Duration(seconds=1))
-                transform = tf.transform
-                rotation_euler = euler_from_quaternion([
-                    transform.rotation.x,
-                    transform.rotation.y,
-                    transform.rotation.z,
-                    transform.rotation.w
-                ])
-                self.get_logger().info(
-                    f'当前平移:{transform.translation}, 旋转欧拉角:{rotation_euler}')
-                return transform
-            except Exception as e:
-                self.get_logger().warn(f'等待坐标变换中，原因: {str(e)}')
-    
 def main():
     rclpy.init()
     patrol = PatrolNode()
     
     patrol.get_logger().info('正在初始化机器人位姿...')
     patrol.init_robot_pose()
-    patrol.get_logger().info('位姿初始化完成！开始执行巡航任务。')
+    patrol.get_logger().info('位姿初始化完成！准备生成全局路径。')
 
-    while rclpy.ok():
-        for point in patrol.get_target_points():
-            x, y, yaw = point[0], point[1], point[2]
-            # 导航到目标点
-            target_pose = patrol.get_pose_by_xyyaw(x, y, yaw)
-            patrol.get_logger().info(f'>>> 准备前往目标点 ({x}, {y}) <<<')
-            patrol.nav_to_pose(target_pose)
-            patrol.get_logger().info(f'<<< 已到达目标点 ({x}, {y}) >>>')
-            
-        # 如果只想跑一圈就停，可以取消下面两行的注释
-        # patrol.get_logger().info('所有巡航点已跑完，任务结束。')
-        # break
+    # 【核心改动 1】：不再使用 for 循环一个个发，而是一次性打包所有点
+    route_poses = patrol.get_target_points_list()
+    
+    if not route_poses:
+        patrol.get_logger().error('没有读取到目标点，任务取消。')
+        return
+
+    patrol.get_logger().info(f'>>> 准备一次性连贯穿越 {len(route_poses)} 个坐标点 <<<')
+    
+    # 【核心改动 2】：使用 goThroughPoses 替代 goToPose
+    # 这个 API 会将中间的点视为“途径点（Via-points）”，规划出一条不停车的全局曲线
+    patrol.goThroughPoses(route_poses)
+
+    # 监控整个穿越任务的进度
+    while not patrol.isTaskComplete():
+        feedback = patrol.getFeedback()
+        if feedback:
+            # 降低终端刷屏频率
+            if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 3 == 0:
+                patrol.get_logger().info(f'正在穿越中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
+
+    # 最终任务结果研判
+    result = patrol.getResult()
+    if result == TaskResult.SUCCEEDED:
+        patrol.get_logger().info('✅ 完美！小车已丝滑穿越全部 8 个点位！')
+    elif result == TaskResult.CANCELED:
+        patrol.get_logger().warn('⚠️ 穿越任务被取消')
+    elif result == TaskResult.FAILED:
+        patrol.get_logger().error('❌ 穿越任务失败 (请检查中间点位是否在墙里，或者被障碍物彻底堵死)')
 
     rclpy.shutdown()
 
