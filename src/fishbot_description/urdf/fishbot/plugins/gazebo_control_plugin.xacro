@@ -16,8 +16,8 @@
                 <wheel_separation>0.2</wheel_separation>
                 <wheel_diameter>0.064</wheel_diameter>
                 <!-- limits -->
-                <max_wheel_torque>20</max_wheel_torque>
-                <max_wheel_acceleration>1.0</max_wheel_acceleration>
+                <max_wheel_torque>400</max_wheel_torque>
+                <max_wheel_acceleration>4.0</max_wheel_acceleration>
                 <!-- output -->
                 <publish_odom>true</publish_odom>
                 <publish_odom_tf>true</publish_odom_tf>

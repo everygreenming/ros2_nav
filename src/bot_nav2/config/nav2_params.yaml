@@ -160,7 +160,7 @@ controller_server:
       vx_samples: 30
       vy_samples: 0
       vtheta_samples: 30
-      sim_time: 1.7
+      sim_time: 1.0
       linear_granularity: 0.05
       angular_granularity: 0.025
       transform_tolerance: 0.2
