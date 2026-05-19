@@ -41,6 +41,7 @@ amcl:
 
 bt_navigator:
   ros__parameters:
+    default_nav_through_poses_bt_xml: "/home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/behavior_trees/my_nav_through_poses.xml"
     use_sim_time: True
     global_frame: map
     robot_base_frame: base_link
@@ -135,8 +136,8 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.20
-      yaw_goal_tolerance: 1.00
+      xy_goal_tolerance: 0.30
+      yaw_goal_tolerance: 1.50
     # DWB parameters
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
@@ -164,12 +165,12 @@ controller_server:
       linear_granularity: 0.05
       angular_granularity: 0.025
       transform_tolerance: 0.2
-      xy_goal_tolerance: 0.20
+      xy_goal_tolerance: 0.30
       trans_stopped_velocity: 0.25
       short_circuit_trajectory_evaluation: True
       stateful: True
       critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.10
+      BaseObstacle.scale: 50.0
       PathAlign.scale: 5.0
       PathAlign.forward_point_distance: 0.1
       GoalAlign.scale: 24.0
@@ -196,8 +197,8 @@ local_costmap:
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.22
+        cost_scaling_factor: 2.5
+        inflation_radius: 0.30
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -254,8 +255,8 @@ global_costmap:
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.22
+        cost_scaling_factor: 2.5
+        inflation_radius: 0.30
       always_send_full_costmap: True
 
 map_server:

@@ -25,6 +25,7 @@ install(DIRECTORY
 
 install(DIRECTORY
   maps
+  behavior_trees
   DESTINATION share/${PROJECT_NAME}
 )
 
