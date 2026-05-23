@@ -12,10 +12,12 @@ class PatrolNode(BasicNavigator):
         # 导航相关定义
         self.declare_parameter('nav_mode', 'through')
         self.declare_parameter('lookahead_dist', 1.0)
+        self.declare_parameter('max_retries', 3)
         self.declare_parameter('initial_point', [0.0, 0.0, 0.0])
         self.declare_parameter('target_points', [0.0, 0.0, 0.0, 1.0, 1.0, 1.57])
         self.nav_mode_ = self.get_parameter('nav_mode').value
         self.lookahead_dist_ = self.get_parameter('lookahead_dist').value
+        self.max_retries_ = self.get_parameter('max_retries').value
         self.initial_point_ = self.get_parameter('initial_point').value
         self.target_points_ = self.get_parameter('target_points').value
         
@@ -95,30 +97,44 @@ def main():
 
     # 获取导航模式并选择相应的 API
     nav_mode = patrol.get_parameter('nav_mode').value
+    max_retries = patrol.get_parameter('max_retries').value
+    
+    import time
+    
     if nav_mode == 'through':
-        patrol.get_logger().info(f'>>> 准备一次性连贯穿越 {len(route_poses)} 个坐标点 (goThroughPoses) <<<')
-        patrol.goThroughPoses(route_poses)
-        
-        # 监控整个穿越任务的进度
-        while not patrol.isTaskComplete():
-            feedback = patrol.getFeedback()
-            if feedback:
-                # 降低终端刷屏频率
-                if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 3 == 0:
-                    patrol.get_logger().info(f'正在导航中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
-        
-        # 最终任务结果研判
-        result = patrol.getResult()
-        if result == TaskResult.SUCCEEDED:
-            patrol.get_logger().info('✅ 完美！小车已丝滑穿越全部点位！')
-        elif result == TaskResult.CANCELED:
-            patrol.get_logger().warn('⚠️ 穿越任务被取消')
-        elif result == TaskResult.FAILED:
-            patrol.get_logger().error('❌ 穿越任务失败 (请检查中间点位是否在墙里，或者被障碍物彻底堵死)')
+        task_succeeded = False
+        for attempt in range(max_retries):
+            patrol.get_logger().info(f'>>> 准备一次性连贯穿越 {len(route_poses)} 个坐标点 (goThroughPoses) (第 {attempt+1} 次尝试) <<<')
+            patrol.goThroughPoses(route_poses)
+            
+            # 监控整个穿越任务的进度
+            while not patrol.isTaskComplete():
+                feedback = patrol.getFeedback()
+                if feedback:
+                    # 降低终端刷屏频率
+                    if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 3 == 0:
+                        patrol.get_logger().info(f'正在导航中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
+            
+            # 最终任务结果研判
+            result = patrol.getResult()
+            if result == TaskResult.SUCCEEDED:
+                patrol.get_logger().info('✅ 完美！小车已丝滑穿越全部点位！')
+                task_succeeded = True
+                break
+            elif result == TaskResult.CANCELED:
+                patrol.get_logger().warn('⚠️ 穿越任务被取消')
+                break
+            elif result == TaskResult.FAILED:
+                if attempt < max_retries - 1:
+                    patrol.get_logger().warn(f'❌ 穿越任务第 {attempt+1} 次失败，正在清除代价地图并重试...')
+                    patrol.clearAllCostmaps()
+                    time.sleep(2.0)
+                else:
+                    patrol.get_logger().error('❌ 穿越任务已达最大重试次数，仍未成功，退出任务。')
 
     elif nav_mode == 'follow':
         lookahead_dist = patrol.get_parameter('lookahead_dist').value
-        patrol.get_logger().info(f'>>> 准备逐点停靠导航 {len(route_poses)} 个坐标点 (提前 {lookahead_dist:.2f} 米切换) <<<')
+        patrol.get_logger().info(f'>>> 准备逐点停靠导航 {len(route_poses)} 个坐标点 (提前 {lookahead_dist:.2f} 米切换，最大重试 {max_retries} 次) <<<')
         
         current_idx = 0
         total_points = len(route_poses)
@@ -127,12 +143,12 @@ def main():
         patrol.goToPose(route_poses[current_idx])
         
         import math
-        import time
         
         def get_distance(p1, p2):
             return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
             
         task_failed = False
+        attempts = 0  # 当前目标点导航重试计数
         
         while current_idx < total_points:
             # 1. 检查任务是否由于意外原因结束（如发生故障或者动作被取消）
@@ -141,13 +157,21 @@ def main():
                 if result == TaskResult.SUCCEEDED:
                     patrol.get_logger().info(f'到达最终目标点 {current_idx + 1}/{total_points}')
                     current_idx += 1
+                    attempts = 0  # 目标完成，重置计数器
                     if current_idx < total_points:
                         patrol.goToPose(route_poses[current_idx])
                     continue
                 else:
-                    patrol.get_logger().error(f'在目标点 {current_idx + 1} 处导航失败，退出任务。')
-                    task_failed = True
-                    break
+                    if attempts < max_retries - 1:
+                        attempts += 1
+                        patrol.get_logger().warn(f'在目标点 {current_idx + 1} 处导航第 {attempts} 次失败，正在清除代价地图并进行第 {attempts+1} 次尝试...')
+                        patrol.clearAllCostmaps()
+                        time.sleep(2.0)
+                        patrol.goToPose(route_poses[current_idx])
+                    else:
+                        patrol.get_logger().error(f'在目标点 {current_idx + 1} 处导航失败已达最大重试次数，退出任务。')
+                        task_failed = True
+                        break
             
             # 2. 获取当前机器人的位置，并计算距离当前目标点的距离
             robot_pose = patrol.get_robot_pose()
@@ -163,6 +187,7 @@ def main():
                             f'距离目标点 {current_idx + 1} 余 {dist:.2f}米 (< {lookahead_dist:.2f}m)，提前规划并切换至目标点 {current_idx + 2}...'
                         )
                         current_idx += 1
+                        attempts = 0  # 成功提前预判切换，重置计数器
                         patrol.goToPose(route_poses[current_idx])
                 else:
                     # 最后一个点，定期打印剩余距离
