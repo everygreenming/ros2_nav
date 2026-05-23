@@ -102,10 +102,27 @@ def main():
     import time
     
     if nav_mode == 'through':
+        import math
+        def get_distance(p1, p2):
+            return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+            
+        passed_idx = 0  # 记录已通过路点的索引数量
+        total_points = len(route_poses)
         task_succeeded = False
+        
         for attempt in range(max_retries):
-            patrol.get_logger().info(f'>>> 准备一次性连贯穿越 {len(route_poses)} 个坐标点 (goThroughPoses) (第 {attempt+1} 次尝试) <<<')
-            patrol.goThroughPoses(route_poses)
+            # 动态切片：只把剩下的未通过路点下发给 Nav2
+            remaining_poses = route_poses[passed_idx:]
+            
+            if not remaining_poses:
+                patrol.get_logger().info('所有路点实际上已全部通过，无需重试。')
+                task_succeeded = True
+                break
+                
+            patrol.get_logger().info(
+                f'>>> 准备连贯穿越剩余的 {len(remaining_poses)}/{total_points} 个坐标点 (goThroughPoses) (第 {attempt+1} 次尝试) <<<'
+            )
+            patrol.goThroughPoses(remaining_poses)
             
             # 监控整个穿越任务的进度
             while not patrol.isTaskComplete():
@@ -113,7 +130,25 @@ def main():
                 if feedback:
                     # 降低终端刷屏频率
                     if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 3 == 0:
-                        patrol.get_logger().info(f'正在导航中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
+                        patrol.get_logger().info(
+                            f'正在导航中 (当前目标: {passed_idx+1}/{total_points})... 预计还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s'
+                        )
+                
+                # 实时检测机器人是否通过了当前期望的路点
+                robot_pose = patrol.get_robot_pose()
+                if robot_pose is not None:
+                    # 循环检查，防止在单次循环中漏掉快速经过的多个点
+                    while passed_idx < total_points:
+                        target_x = route_poses[passed_idx].pose.position.x
+                        target_y = route_poses[passed_idx].pose.position.y
+                        dist = get_distance(robot_pose, (target_x, target_y))
+                        if dist < 0.7:  # 0.7 米范围内认为已通过
+                            patrol.get_logger().info(f'检测到已成功通过目标点 {passed_idx + 1}/{total_points}，距离: {dist:.2f} 米')
+                            passed_idx += 1
+                        else:
+                            break
+                            
+                time.sleep(0.1)  # 10Hz 监控频率
             
             # 最终任务结果研判
             result = patrol.getResult()
@@ -125,8 +160,22 @@ def main():
                 patrol.get_logger().warn('⚠️ 穿越任务被取消')
                 break
             elif result == TaskResult.FAILED:
+                # 失败时先最后检查一次在失败的这一刻有没有最新通过的点
+                robot_pose = patrol.get_robot_pose()
+                if robot_pose is not None:
+                    while passed_idx < total_points:
+                        target_x = route_poses[passed_idx].pose.position.x
+                        target_y = route_poses[passed_idx].pose.position.y
+                        dist = get_distance(robot_pose, (target_x, target_y))
+                        if dist < 0.7:
+                            passed_idx += 1
+                        else:
+                            break
+                            
                 if attempt < max_retries - 1:
-                    patrol.get_logger().warn(f'❌ 穿越任务第 {attempt+1} 次失败，正在清除代价地图并重试...')
+                    patrol.get_logger().warn(
+                        f'❌ 穿越任务第 {attempt+1} 次失败 (已通过 {passed_idx}/{total_points} 个点)。正在清除地图，准备从当前位置对剩余路点进行重试...'
+                    )
                     patrol.clearAllCostmaps()
                     time.sleep(2.0)
                 else:
