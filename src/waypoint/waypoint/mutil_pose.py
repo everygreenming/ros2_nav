@@ -11,9 +11,11 @@ class PatrolNode(BasicNavigator):
         super().__init__(node_name)
         # 导航相关定义
         self.declare_parameter('nav_mode', 'through')
+        self.declare_parameter('lookahead_dist', 1.0)
         self.declare_parameter('initial_point', [0.0, 0.0, 0.0])
         self.declare_parameter('target_points', [0.0, 0.0, 0.0, 1.0, 1.0, 1.57])
         self.nav_mode_ = self.get_parameter('nav_mode').value
+        self.lookahead_dist_ = self.get_parameter('lookahead_dist').value
         self.initial_point_ = self.get_parameter('initial_point').value
         self.target_points_ = self.get_parameter('target_points').value
         
@@ -115,7 +117,8 @@ def main():
             patrol.get_logger().error('❌ 穿越任务失败 (请检查中间点位是否在墙里，或者被障碍物彻底堵死)')
 
     elif nav_mode == 'follow':
-        patrol.get_logger().info(f'>>> 准备逐点停靠导航 {len(route_poses)} 个坐标点 (提前2米切换) <<<')
+        lookahead_dist = patrol.get_parameter('lookahead_dist').value
+        patrol.get_logger().info(f'>>> 准备逐点停靠导航 {len(route_poses)} 个坐标点 (提前 {lookahead_dist:.2f} 米切换) <<<')
         
         current_idx = 0
         total_points = len(route_poses)
@@ -153,11 +156,11 @@ def main():
                 target_y = route_poses[current_idx].pose.position.y
                 dist = get_distance(robot_pose, (target_x, target_y))
                 
-                # 3. 如果不是最后一个点，且距离小于 2 米，提前切换到下一个点
+                # 3. 如果不是最后一个点，且距离小于设定的阈值，提前切换到下一个点
                 if current_idx < total_points - 1:
-                    if dist < 2.0:
+                    if dist < lookahead_dist:
                         patrol.get_logger().info(
-                            f'距离目标点 {current_idx + 1} 余 {dist:.2f}米 (< 2.0m)，提前规划并切换至目标点 {current_idx + 2}...'
+                            f'距离目标点 {current_idx + 1} 余 {dist:.2f}米 (< {lookahead_dist:.2f}m)，提前规划并切换至目标点 {current_idx + 2}...'
                         )
                         current_idx += 1
                         patrol.goToPose(route_poses[current_idx])
