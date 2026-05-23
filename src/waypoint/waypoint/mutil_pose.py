@@ -10,8 +10,10 @@ class PatrolNode(BasicNavigator):
     def __init__(self, node_name='patrol_node'):
         super().__init__(node_name)
         # 导航相关定义
+        self.declare_parameter('nav_mode', 'through')
         self.declare_parameter('initial_point', [0.0, 0.0, 0.0])
         self.declare_parameter('target_points', [0.0, 0.0, 0.0, 1.0, 1.0, 1.57])
+        self.nav_mode_ = self.get_parameter('nav_mode').value
         self.initial_point_ = self.get_parameter('initial_point').value
         self.target_points_ = self.get_parameter('target_points').value
         
@@ -77,11 +79,17 @@ def main():
         patrol.get_logger().error('没有读取到目标点，任务取消。')
         return
 
-    patrol.get_logger().info(f'>>> 准备一次性连贯穿越 {len(route_poses)} 个坐标点 <<<')
-    
-    # 【核心改动 2】：使用 goThroughPoses 替代 goToPose
-    # 这个 API 会将中间的点视为“途径点（Via-points）”，规划出一条不停车的全局曲线
-    patrol.goThroughPoses(route_poses)
+    # 获取导航模式并选择相应的 API
+    nav_mode = patrol.get_parameter('nav_mode').value
+    if nav_mode == 'through':
+        patrol.get_logger().info(f'>>> 准备一次性连贯穿越 {len(route_poses)} 个坐标点 (goThroughPoses) <<<')
+        patrol.goThroughPoses(route_poses)
+    elif nav_mode == 'follow':
+        patrol.get_logger().info(f'>>> 准备逐点停靠导航 {len(route_poses)} 个坐标点 (followWaypoints) <<<')
+        patrol.followWaypoints(route_poses)
+    else:
+        patrol.get_logger().error(f'无效的 nav_mode: "{nav_mode}"，默认使用 through (连续穿越) 模式。')
+        patrol.goThroughPoses(route_poses)
 
     # 监控整个穿越任务的进度
     while not patrol.isTaskComplete():
@@ -89,7 +97,7 @@ def main():
         if feedback:
             # 降低终端刷屏频率
             if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 3 == 0:
-                patrol.get_logger().info(f'正在穿越中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
+                patrol.get_logger().info(f'正在导航中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
 
     # 最终任务结果研判
     result = patrol.getResult()
