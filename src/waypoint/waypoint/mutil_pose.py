@@ -21,6 +21,18 @@ class PatrolNode(BasicNavigator):
         self.buffer_ = Buffer()
         self.listener_ = TransformListener(self.buffer_, self)
 
+    def get_robot_pose(self):
+        """
+        通过 TF 获取小车当前在 map 坐标系下的位置
+        """
+        for base_frame in ['base_footprint', 'base_link']:
+            try:
+                tf = self.buffer_.lookup_transform('map', base_frame, rclpy.time.Time())
+                return tf.transform.translation.x, tf.transform.translation.y
+            except Exception:
+                continue
+        return None
+
     def get_pose_by_xyyaw(self, x, y, yaw):
         """
         通过 x,y,yaw 合成 PoseStamped
@@ -84,29 +96,84 @@ def main():
     if nav_mode == 'through':
         patrol.get_logger().info(f'>>> 准备一次性连贯穿越 {len(route_poses)} 个坐标点 (goThroughPoses) <<<')
         patrol.goThroughPoses(route_poses)
+        
+        # 监控整个穿越任务的进度
+        while not patrol.isTaskComplete():
+            feedback = patrol.getFeedback()
+            if feedback:
+                # 降低终端刷屏频率
+                if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 3 == 0:
+                    patrol.get_logger().info(f'正在导航中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
+        
+        # 最终任务结果研判
+        result = patrol.getResult()
+        if result == TaskResult.SUCCEEDED:
+            patrol.get_logger().info('✅ 完美！小车已丝滑穿越全部点位！')
+        elif result == TaskResult.CANCELED:
+            patrol.get_logger().warn('⚠️ 穿越任务被取消')
+        elif result == TaskResult.FAILED:
+            patrol.get_logger().error('❌ 穿越任务失败 (请检查中间点位是否在墙里，或者被障碍物彻底堵死)')
+
     elif nav_mode == 'follow':
-        patrol.get_logger().info(f'>>> 准备逐点停靠导航 {len(route_poses)} 个坐标点 (followWaypoints) <<<')
-        patrol.followWaypoints(route_poses)
+        patrol.get_logger().info(f'>>> 准备逐点停靠导航 {len(route_poses)} 个坐标点 (提前2米切换) <<<')
+        
+        current_idx = 0
+        total_points = len(route_poses)
+        
+        # 下发第一个目标点
+        patrol.goToPose(route_poses[current_idx])
+        
+        import math
+        import time
+        
+        def get_distance(p1, p2):
+            return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+            
+        task_failed = False
+        
+        while current_idx < total_points:
+            # 1. 检查任务是否由于意外原因结束（如发生故障或者动作被取消）
+            if patrol.isTaskComplete():
+                result = patrol.getResult()
+                if result == TaskResult.SUCCEEDED:
+                    patrol.get_logger().info(f'到达最终目标点 {current_idx + 1}/{total_points}')
+                    current_idx += 1
+                    if current_idx < total_points:
+                        patrol.goToPose(route_poses[current_idx])
+                    continue
+                else:
+                    patrol.get_logger().error(f'在目标点 {current_idx + 1} 处导航失败，退出任务。')
+                    task_failed = True
+                    break
+            
+            # 2. 获取当前机器人的位置，并计算距离当前目标点的距离
+            robot_pose = patrol.get_robot_pose()
+            if robot_pose is not None:
+                target_x = route_poses[current_idx].pose.position.x
+                target_y = route_poses[current_idx].pose.position.y
+                dist = get_distance(robot_pose, (target_x, target_y))
+                
+                # 3. 如果不是最后一个点，且距离小于 2 米，提前切换到下一个点
+                if current_idx < total_points - 1:
+                    if dist < 2.0:
+                        patrol.get_logger().info(
+                            f'距离目标点 {current_idx + 1} 余 {dist:.2f}米 (< 2.0m)，提前规划并切换至目标点 {current_idx + 2}...'
+                        )
+                        current_idx += 1
+                        patrol.goToPose(route_poses[current_idx])
+                else:
+                    # 最后一个点，定期打印剩余距离
+                    if int(time.time() * 2) % 3 == 0:
+                        patrol.get_logger().info(f'前往终点中... 距离终点还剩: {dist:.2f} 米')
+            
+            # 10Hz 循环频率
+            time.sleep(0.1)
+            
+        if not task_failed:
+            patrol.get_logger().info('✅ 完美！已平滑完成所有点位的导航！')
+            
     else:
-        patrol.get_logger().error(f'无效的 nav_mode: "{nav_mode}"，默认使用 through (连续穿越) 模式。')
-        patrol.goThroughPoses(route_poses)
-
-    # 监控整个穿越任务的进度
-    while not patrol.isTaskComplete():
-        feedback = patrol.getFeedback()
-        if feedback:
-            # 降低终端刷屏频率
-            if int(Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9) % 3 == 0:
-                patrol.get_logger().info(f'正在导航中... 预计全路段完成还需: {Duration.from_msg(feedback.estimated_time_remaining).nanoseconds / 1e9:.1f} s')
-
-    # 最终任务结果研判
-    result = patrol.getResult()
-    if result == TaskResult.SUCCEEDED:
-        patrol.get_logger().info('✅ 完美！小车已丝滑穿越全部 8 个点位！')
-    elif result == TaskResult.CANCELED:
-        patrol.get_logger().warn('⚠️ 穿越任务被取消')
-    elif result == TaskResult.FAILED:
-        patrol.get_logger().error('❌ 穿越任务失败 (请检查中间点位是否在墙里，或者被障碍物彻底堵死)')
+        patrol.get_logger().error(f'无效的 nav_mode: "{nav_mode}"，无法执行导航任务。')
 
     rclpy.shutdown()
 
