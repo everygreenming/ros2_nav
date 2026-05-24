@@ -1,0 +1,54 @@
+[0.053s] Invoking command in '/home/everygreen/ros2/bot_ws/build/bot_nav2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/everygreen/ros2/bot_ws/src/bot_nav2 -DCMAKE_INSTALL_PREFIX=/home/everygreen/ros2/bot_ws/install/bot_nav2
+[0.460s] -- The C compiler identification is GNU 11.4.0
+[0.801s] -- The CXX compiler identification is GNU 11.4.0
+[0.859s] -- Detecting C compiler ABI info
+[1.013s] -- Detecting C compiler ABI info - done
+[1.032s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.032s] -- Detecting C compile features
+[1.032s] -- Detecting C compile features - done
+[1.032s] -- Detecting CXX compiler ABI info
+[1.251s] -- Detecting CXX compiler ABI info - done
+[1.265s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.265s] -- Detecting CXX compile features
+[1.268s] -- Detecting CXX compile features - done
+[1.276s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[1.568s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.764s] -- Found ament_lint_auto: 0.12.15 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.874s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.876s] -- Added test 'lint_cmake' to check CMake code style
+[1.876s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[1.879s] -- Added test 'xmllint' to check XML markup files
+[1.883s] -- Configuring done
+[1.886s] -- Generating done
+[1.887s] -- Build files have been written to: /home/everygreen/ros2/bot_ws/build/bot_nav2
+[1.894s] Invoked command in '/home/everygreen/ros2/bot_ws/build/bot_nav2' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/everygreen/ros2/bot_ws/src/bot_nav2 -DCMAKE_INSTALL_PREFIX=/home/everygreen/ros2/bot_ws/install/bot_nav2
+[1.895s] Invoking command in '/home/everygreen/ros2/bot_ws/build/bot_nav2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/everygreen/ros2/bot_ws/build/bot_nav2 -- -j4 -l4
+[1.987s] Invoked command in '/home/everygreen/ros2/bot_ws/build/bot_nav2' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/everygreen/ros2/bot_ws/build/bot_nav2 -- -j4 -l4
+[1.989s] Invoking command in '/home/everygreen/ros2/bot_ws/build/bot_nav2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/everygreen/ros2/bot_ws/build/bot_nav2
+[2.011s] -- Install configuration: ""
+[2.011s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/launch
+[2.011s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/launch/nav2_launch.py
+[2.011s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/config
+[2.012s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/config/nav2_params.yaml
+[2.012s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps
+[2.012s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps/fishbot_map.yaml
+[2.012s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps/fishbot_map.pgm
+[2.012s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/behavior_trees
+[2.012s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/behavior_trees/my_nav_through_poses.xml
+[2.012s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/lib/bot_nav2/patrol_node.py
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/ament_index/resource_index/package_run_dependencies/bot_nav2
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/ament_index/resource_index/parent_prefix_path/bot_nav2
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/ament_prefix_path.sh
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/ament_prefix_path.dsv
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/path.sh
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/path.dsv
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.bash
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.sh
+[2.013s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.zsh
+[2.014s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.dsv
+[2.014s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/package.dsv
+[2.014s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/ament_index/resource_index/packages/bot_nav2
+[2.014s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/cmake/bot_nav2Config.cmake
+[2.014s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/cmake/bot_nav2Config-version.cmake
+[2.014s] -- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/package.xml
+[2.072s] Invoked command in '/home/everygreen/ros2/bot_ws/build/bot_nav2' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/everygreen/ros2/bot_ws/build/bot_nav2

@@ -1,0 +1,26 @@
+-- Install configuration: ""
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/launch
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/launch/nav2_launch.py
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/config
+-- Installing: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/config/nav2_params.yaml
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps/fishbot_map.yaml
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps/fishbot_map.pgm
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/behavior_trees
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/behavior_trees/my_nav_through_poses.xml
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/lib/bot_nav2/patrol_node.py
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/ament_index/resource_index/package_run_dependencies/bot_nav2
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/ament_index/resource_index/parent_prefix_path/bot_nav2
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/ament_prefix_path.sh
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/path.sh
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/environment/path.dsv
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.bash
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.sh
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.zsh
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/local_setup.dsv
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/package.dsv
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/ament_index/resource_index/packages/bot_nav2
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/cmake/bot_nav2Config.cmake
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/cmake/bot_nav2Config-version.cmake
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/package.xml

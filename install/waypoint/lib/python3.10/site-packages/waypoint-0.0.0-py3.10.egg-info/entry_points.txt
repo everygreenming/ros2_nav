@@ -1,0 +1,6 @@
+[console_scripts]
+get_pose = waypoint.get_pose:main
+go_to_pose = waypoint.go_to_pose:main
+init_bot_pose = waypoint.init_bot_pose:main
+mutil_pose = waypoint.mutil_pose:main
+

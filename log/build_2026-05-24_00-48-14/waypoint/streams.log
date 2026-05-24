@@ -1,0 +1,25 @@
+[0.469s] Invoking command in '/home/everygreen/ros2/bot_ws/src/waypoint': PYTHONPATH=/home/everygreen/ros2/bot_ws/build/waypoint/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/waypoint build --build-base /home/everygreen/ros2/bot_ws/build/waypoint/build install --record /home/everygreen/ros2/bot_ws/build/waypoint/install.log --single-version-externally-managed install_data
+[0.614s] running egg_info
+[0.614s] writing ../../build/waypoint/waypoint.egg-info/PKG-INFO
+[0.614s] writing dependency_links to ../../build/waypoint/waypoint.egg-info/dependency_links.txt
+[0.614s] writing entry points to ../../build/waypoint/waypoint.egg-info/entry_points.txt
+[0.615s] writing requirements to ../../build/waypoint/waypoint.egg-info/requires.txt
+[0.615s] writing top-level names to ../../build/waypoint/waypoint.egg-info/top_level.txt
+[0.616s] reading manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+[0.616s] adding license file 'LICENSE'
+[0.616s] writing manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+[0.616s] running build
+[0.616s] running build_py
+[0.617s] running install
+[0.617s] running install_lib
+[0.617s] running install_data
+[0.617s] running install_egg_info
+[0.619s] removing '/home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint-0.0.0-py3.10.egg-info' (and everything under it)
+[0.619s] Copying ../../build/waypoint/waypoint.egg-info to /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint-0.0.0-py3.10.egg-info
+[0.619s] running install_scripts
+[0.634s] Installing get_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[0.635s] Installing go_to_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[0.636s] Installing init_bot_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[0.637s] Installing mutil_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[0.637s] writing list of installed files to '/home/everygreen/ros2/bot_ws/build/waypoint/install.log'
+[0.654s] Invoked command in '/home/everygreen/ros2/bot_ws/src/waypoint' returned '0': PYTHONPATH=/home/everygreen/ros2/bot_ws/build/waypoint/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/waypoint build --build-base /home/everygreen/ros2/bot_ws/build/waypoint/build install --record /home/everygreen/ros2/bot_ws/build/waypoint/install.log --single-version-externally-managed install_data
