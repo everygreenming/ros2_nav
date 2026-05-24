@@ -162,7 +162,7 @@ controller_server:
       vx_samples: 30
       vy_samples: 0
       vtheta_samples: 30
-      sim_time: 1.0
+      sim_time: 1.7
       linear_granularity: 0.05
       angular_granularity: 0.025
       transform_tolerance: 0.2
@@ -171,7 +171,7 @@ controller_server:
       short_circuit_trajectory_evaluation: True
       stateful: True
       critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 50.0
+      BaseObstacle.scale: 80.0
       PathAlign.scale: 5.0
       PathAlign.forward_point_distance: 0.1
       GoalAlign.scale: 24.0
@@ -198,7 +198,7 @@ local_costmap:
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 2.5
+        cost_scaling_factor: 1.5
         inflation_radius: 0.30
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
@@ -256,7 +256,7 @@ global_costmap:
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 2.5
+        cost_scaling_factor: 1.5
         inflation_radius: 0.30
       always_send_full_costmap: True
 
