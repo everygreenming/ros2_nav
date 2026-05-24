@@ -1,6 +1,0 @@
-Invoking command in '/home/everygreen/ros2/bot_ws/build/fishbot_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/everygreen/ros2/bot_ws/src/fishbot_description -DCMAKE_INSTALL_PREFIX=/home/everygreen/ros2/bot_ws/install/fishbot_description
-Invoked command in '/home/everygreen/ros2/bot_ws/build/fishbot_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/everygreen/ros2/bot_ws/src/fishbot_description -DCMAKE_INSTALL_PREFIX=/home/everygreen/ros2/bot_ws/install/fishbot_description
-Invoking command in '/home/everygreen/ros2/bot_ws/build/fishbot_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/everygreen/ros2/bot_ws/build/fishbot_description -- -j4 -l4
-Invoked command in '/home/everygreen/ros2/bot_ws/build/fishbot_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/everygreen/ros2/bot_ws/build/fishbot_description -- -j4 -l4
-Invoking command in '/home/everygreen/ros2/bot_ws/build/fishbot_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/everygreen/ros2/bot_ws/build/fishbot_description
-Invoked command in '/home/everygreen/ros2/bot_ws/build/fishbot_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/everygreen/ros2/bot_ws/build/fishbot_description
