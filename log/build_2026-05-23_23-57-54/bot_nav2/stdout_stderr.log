@@ -1,0 +1,16 @@
+-- Install configuration: ""
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/launch
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/launch/nav2_launch.py
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/config
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/config/nav2_params.yaml
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps/fishbot_map.yaml
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/maps/fishbot_map.pgm
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/behavior_trees
+-- Up-to-date: /home/everygreen/ros2/bot_ws/install/bot_nav2/share/bot_nav2/behavior_trees/my_nav_through_poses.xml
+[31mCMake Error at cmake_install.cmake:61 (file):
+  file INSTALL cannot find
+  "/home/everygreen/ros2/bot_ws/src/bot_nav2/scripts/patrol_node.py": No such
+  file or directory.
+
+[0m

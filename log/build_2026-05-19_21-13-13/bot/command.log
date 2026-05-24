@@ -1,0 +1,6 @@
+Invoking command in '/home/everygreen/ros2/bot_ws/build/bot': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/everygreen/ros2/bot_ws/src/bot -DCMAKE_INSTALL_PREFIX=/home/everygreen/ros2/bot_ws/install/bot
+Invoked command in '/home/everygreen/ros2/bot_ws/build/bot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/everygreen/ros2/bot_ws/src/bot -DCMAKE_INSTALL_PREFIX=/home/everygreen/ros2/bot_ws/install/bot
+Invoking command in '/home/everygreen/ros2/bot_ws/build/bot': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/everygreen/ros2/bot_ws/build/bot -- -j4 -l4
+Invoked command in '/home/everygreen/ros2/bot_ws/build/bot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/everygreen/ros2/bot_ws/build/bot -- -j4 -l4
+Invoking command in '/home/everygreen/ros2/bot_ws/build/bot': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/everygreen/ros2/bot_ws/build/bot
+Invoked command in '/home/everygreen/ros2/bot_ws/build/bot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/everygreen/ros2/bot_ws/build/bot

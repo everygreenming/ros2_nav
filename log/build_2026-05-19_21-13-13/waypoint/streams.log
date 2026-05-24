@@ -1,0 +1,54 @@
+[1.999s] Invoking command in '/home/everygreen/ros2/bot_ws/src/waypoint': PYTHONPATH=/home/everygreen/ros2/bot_ws/build/waypoint/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/waypoint build --build-base /home/everygreen/ros2/bot_ws/build/waypoint/build install --record /home/everygreen/ros2/bot_ws/build/waypoint/install.log --single-version-externally-managed install_data
+[2.239s] running egg_info
+[2.239s] creating ../../build/waypoint/waypoint.egg-info
+[2.239s] writing ../../build/waypoint/waypoint.egg-info/PKG-INFO
+[2.239s] writing dependency_links to ../../build/waypoint/waypoint.egg-info/dependency_links.txt
+[2.239s] writing entry points to ../../build/waypoint/waypoint.egg-info/entry_points.txt
+[2.239s] writing requirements to ../../build/waypoint/waypoint.egg-info/requires.txt
+[2.239s] writing top-level names to ../../build/waypoint/waypoint.egg-info/top_level.txt
+[2.241s] writing manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+[2.241s] reading manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+[2.241s] adding license file 'LICENSE'
+[2.241s] writing manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+[2.241s] running build
+[2.241s] running build_py
+[2.241s] creating /home/everygreen/ros2/bot_ws/build/waypoint/build
+[2.241s] creating /home/everygreen/ros2/bot_ws/build/waypoint/build/lib
+[2.241s] creating /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+[2.241s] copying waypoint/mutil_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+[2.241s] copying waypoint/init_bot_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+[2.241s] copying waypoint/go_to_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+[2.242s] copying waypoint/get_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+[2.242s] copying waypoint/__init__.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+[2.242s] running install
+[2.242s] running install_lib
+[2.242s] creating /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+[2.242s] copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/mutil_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+[2.242s] copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/init_bot_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+[2.242s] copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/go_to_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+[2.242s] copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/get_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+[2.242s] copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/__init__.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+[2.242s] byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/mutil_pose.py to mutil_pose.cpython-310.pyc
+[2.243s] byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/init_bot_pose.py to init_bot_pose.cpython-310.pyc
+[2.244s] byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/go_to_pose.py to go_to_pose.cpython-310.pyc
+[2.244s] byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/get_pose.py to get_pose.cpython-310.pyc
+[2.245s] byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/__init__.py to __init__.cpython-310.pyc
+[2.245s] running install_data
+[2.245s] creating /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index
+[2.245s] creating /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index/resource_index
+[2.245s] creating /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index/resource_index/packages
+[2.245s] copying resource/waypoint -> /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index/resource_index/packages
+[2.245s] copying package.xml -> /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint
+[2.246s] creating /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/config
+[2.246s] copying config/waypoints.yaml -> /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/config
+[2.246s] creating /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/launch
+[2.246s] copying launch/pose_launch.py -> /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/launch
+[2.246s] running install_egg_info
+[2.248s] Copying ../../build/waypoint/waypoint.egg-info to /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint-0.0.0-py3.10.egg-info
+[2.249s] running install_scripts
+[2.267s] Installing get_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[2.268s] Installing go_to_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[2.268s] Installing init_bot_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[2.268s] Installing mutil_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+[2.268s] writing list of installed files to '/home/everygreen/ros2/bot_ws/build/waypoint/install.log'
+[2.294s] Invoked command in '/home/everygreen/ros2/bot_ws/src/waypoint' returned '0': PYTHONPATH=/home/everygreen/ros2/bot_ws/build/waypoint/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/waypoint build --build-base /home/everygreen/ros2/bot_ws/build/waypoint/build install --record /home/everygreen/ros2/bot_ws/build/waypoint/install.log --single-version-externally-managed install_data

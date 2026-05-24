@@ -1,0 +1,52 @@
+running egg_info
+creating ../../build/waypoint/waypoint.egg-info
+writing ../../build/waypoint/waypoint.egg-info/PKG-INFO
+writing dependency_links to ../../build/waypoint/waypoint.egg-info/dependency_links.txt
+writing entry points to ../../build/waypoint/waypoint.egg-info/entry_points.txt
+writing requirements to ../../build/waypoint/waypoint.egg-info/requires.txt
+writing top-level names to ../../build/waypoint/waypoint.egg-info/top_level.txt
+writing manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+reading manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/everygreen/ros2/bot_ws/build/waypoint/build
+creating /home/everygreen/ros2/bot_ws/build/waypoint/build/lib
+creating /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+copying waypoint/mutil_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+copying waypoint/init_bot_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+copying waypoint/go_to_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+copying waypoint/get_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+copying waypoint/__init__.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+running install
+running install_lib
+creating /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/mutil_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/init_bot_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/go_to_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/get_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/__init__.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/mutil_pose.py to mutil_pose.cpython-310.pyc
+byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/init_bot_pose.py to init_bot_pose.cpython-310.pyc
+byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/go_to_pose.py to go_to_pose.cpython-310.pyc
+byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/get_pose.py to get_pose.cpython-310.pyc
+byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index
+creating /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index/resource_index
+creating /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index/resource_index/packages
+copying resource/waypoint -> /home/everygreen/ros2/bot_ws/install/waypoint/share/ament_index/resource_index/packages
+copying package.xml -> /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint
+creating /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/config
+copying config/waypoints.yaml -> /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/config
+creating /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/launch
+copying launch/pose_launch.py -> /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/launch
+running install_egg_info
+Copying ../../build/waypoint/waypoint.egg-info to /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint-0.0.0-py3.10.egg-info
+running install_scripts
+Installing get_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+Installing go_to_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+Installing init_bot_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+Installing mutil_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+writing list of installed files to '/home/everygreen/ros2/bot_ws/build/waypoint/install.log'

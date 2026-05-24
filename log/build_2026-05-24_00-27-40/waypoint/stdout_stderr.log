@@ -1,0 +1,27 @@
+running egg_info
+writing ../../build/waypoint/waypoint.egg-info/PKG-INFO
+writing dependency_links to ../../build/waypoint/waypoint.egg-info/dependency_links.txt
+writing entry points to ../../build/waypoint/waypoint.egg-info/entry_points.txt
+writing requirements to ../../build/waypoint/waypoint.egg-info/requires.txt
+writing top-level names to ../../build/waypoint/waypoint.egg-info/top_level.txt
+reading manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/waypoint/waypoint.egg-info/SOURCES.txt'
+running build
+running build_py
+copying waypoint/mutil_pose.py -> /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint
+running install
+running install_lib
+copying /home/everygreen/ros2/bot_ws/build/waypoint/build/lib/waypoint/mutil_pose.py -> /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint
+byte-compiling /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/mutil_pose.py to mutil_pose.cpython-310.pyc
+running install_data
+copying launch/pose_launch.py -> /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/launch
+running install_egg_info
+removing '/home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/waypoint/waypoint.egg-info to /home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint-0.0.0-py3.10.egg-info
+running install_scripts
+Installing get_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+Installing go_to_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+Installing init_bot_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+Installing mutil_pose script to /home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint
+writing list of installed files to '/home/everygreen/ros2/bot_ws/build/waypoint/install.log'
