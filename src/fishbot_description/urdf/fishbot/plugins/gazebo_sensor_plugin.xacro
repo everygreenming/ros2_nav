@@ -117,6 +117,7 @@
         <gazebo reference="camera_link">
             <sensor type="depth" name="camera_sensor">
                 <plugin name="depth_camera" filename="libgazebo_ros_camera.so">
+                    <camera_name>camera</camera_name>
                     <frame_name>camera_optical_link</frame_name>
                 </plugin>
                 <always_on>true</always_on>
