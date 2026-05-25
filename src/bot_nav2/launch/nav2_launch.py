@@ -48,7 +48,10 @@ def generate_launch_description():
             launch_arguments={
                 'map': map_yaml_path,
                 'use_sim_time': use_sim_time,
-                'params_file': configured_params}.items(),
+                'params_file': configured_params,
+                'initial_pose_x': '0.3814',
+                'initial_pose_y': '3.4835',
+                'initial_pose_yaw': '0.0'}.items(),
         ),
         
         # 7. 启动 RViz2
