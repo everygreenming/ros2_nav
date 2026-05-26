@@ -60,7 +60,7 @@ ros2 launch bot sim.launch.py
 ```bash
 ros2 launch bot_nav2 nav2_launch.py
 ```
-
+进入后可以在rviz中手动初始化位姿（2D Pose Estimate）,使用nav goal进行单点导航，使用自带的nav through手动设置路点进行多点导航。
 
 ### 步骤 3：启动多点巡航/导航控制脚本
 该节点通过 Python 代码向 Nav2 自动下发预设的 8 个目标点坐标，并初始化位姿，同时开始自动导航。
@@ -69,17 +69,64 @@ ros2 launch bot_nav2 nav2_launch.py
 ros2 launch waypoint pose_launch.py
 
 # 模式 B：Follow 单点停靠模式（含 1.0米 提前平滑切弯）
-ros2 launch waypoint pose_launch.py nav_mode:=follow 
+ros2 launch waypoint pose_launch.py nav_mode:=follow
+
 ```
 
 ---
 
 ##  目录结构与关键文件介绍
 
-*   **`src/fishbot_description/`**：包含小车的三维网格、传感器（雷达、IMU、深度相机）和执行器轮子的 URDF/Xacro 宏定义，以及 Gazebo 物理属性插件。
-*   **`src/bot/`**：包含 Gazebo 的仿真世界定义（`worlds/bot.world`，内含优化后的锥桶碰撞模型）以及 Gazebo 的启动 launch 脚本。
-*   **`src/bot_nav2/`**：包含导航配置文件（`config/nav2_params.yaml`）、调参后的through行为树、建好的栅格地图（`maps/`）以及 Nav2 启动 launch 脚本。
-*   **`src/waypoint/`**：多点导航包，包含节点核心逻辑 `mutil_pose.py`、预设航点文件 `config/waypoints.yaml` 和启动脚本 `pose_launch.py`。
+
+```text
+bot_ws/src/
+├── bot/                              # Gazebo 仿真世界与启动包
+│   ├── launch/
+│   │   └── sim.launch.py             # 仿真总启动脚本 (加载小车模型与仿真环境)
+│   ├── models/bot_map/               # 仿真地图模型文件 (包含 map.stl（在cad绘制） 及纹理配置) 
+│   └── worlds/
+│       └── bot.world                 # 核心物理世界场景定义 
+│
+├── bot_nav2/                         # Navigation2 导航配置核心包
+│   ├── behavior_trees/
+│   │   └── my_nav_through_poses.xml  # 自定义行为树 (包含清图自愈与特定恢复逻辑)
+│   ├── config/
+│   │   └── nav2_params.yaml          # Nav2 核心调优参数 (包含 AMCL定位、代价地图膨胀、DWB局部规划器等)
+│   ├── launch/
+│   │   └── nav2_launch.py            # 导航系统总启动脚本 (加载地图、AMCL与规划器)
+│   └── maps/
+│       ├── fishbot_map.pgm           # 2D 栅格地图文件
+│       └── fishbot_map.yaml          # 2D 地图元数据 (分辨率、原点等信息)
+│
+├── fishbot_description/              # 机器人 URDF 描述与物理控制包
+│   ├── config/rviz/
+│   │   └── dispaly_model.rviz        # RViz 可视化预设配置
+│   └── urdf/fishbot/
+│       ├── fishbot.urdf.xacro        # 小车 URDF 主入口文件
+│       ├── base.urdf.xacro           # 底盘几何定义
+│       ├── common_inertia.xacro      # 惯性矩阵通用宏
+│       ├── actuator/
+│       │   ├── wheel.urdf.xacro      # 驱动轮定义 
+│       │   └── caster.urdf.xacro     # 万向支撑轮定义
+│       ├── sensor/
+│       │   ├── laser.urdf.xacro      # 2D 激光雷达结构
+│       │   ├── camera.urdf.xacro     # 深度相机结构
+│       │   └── imu.urdf.xacro        # IMU 传感器结构
+│       └── plugins/
+│           ├── gazebo_control_plugin.xacro # 差速控制真值插件 (解决里程计漂移的关键)
+│           └── gazebo_sensor_plugin.xacro  # 传感器仿真数据输出插件
+│
+└── waypoint/                         # 自动多点巡航控制算法包
+    ├── config/
+    │   └── waypoints.yaml            # 预设的巡航路线坐标点 (包含8个途径点)
+    ├── launch/
+    │   └── pose_launch.py            # 巡航节点启动脚本 (可传入 nav_mode、lookahead_dist 等参数)
+    └── waypoint/
+        ├── mutil_pose.py             # 多点巡航核心业务逻辑 (含 Through/Follow 双模式、三次碰撞自愈重试功能)
+        ├── init_bot_pose.py          # 小车初始位姿标定辅助测试脚本
+        ├── go_to_pose.py             # 单点导航测试脚本
+        └── get_pose.py               # 航点坐标拾取辅助脚本
+```
 
 ## 特别说明
 * 由于比赛中将使用实车，所以小车采用的是鱼香ros提供的开源代码，但是对激光雷达安装位置进行了降低，从而更好地实现避障。并将里程计来源更改为gazebo坐标系，使定位更精准。同时提高了小车的扭矩，提升了速度性能，完成导航项目大概在24s左右，仿真数据显示速度基本在1.5m/s左右。
