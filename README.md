@@ -5,22 +5,38 @@
 
 ## 依赖安装
 
-本项目推荐在以下系统环境运行：
-*   **操作系统**：Ubuntu 22.04 LTS (支持通过 WSL 2 或原生安装) / Windows (原生或虚拟环境)
+本项目是在以下系统环境开发：
+*   **操作系统**：Ubuntu 22.04 LTS
 *   **ROS 2 版本**：ROS 2 Humble Hawksbill
 *   **仿真器**：Gazebo Classic (Gazebo 11)
 
-### 安装核心依赖包：
-在你的 Linux 终端中运行以下命令安装必要的 ROS 2 工具箱：
+### 1. 自动安装（推荐，支持任意 ROS 2 版本）：
+由于在各功能包的 `package.xml` 中已经声明了完整的依赖关系，可以利用 `rosdep` 自动根据当前的 ROS 2 版本进行检测和补全。
+
+请在终端中执行：
+
+```bash
+sudo rosdep init
+rosdep update
+# 在 bot_ws 工作空间根目录下执行：
+rosdep install -i --from-path src --rosdistro $ROS_DISTRO -y
+```
+
+### 2. 手动安装（备用）：
+如果你更倾向于手动通过 `apt` 安装，请使用环境变量 `$ROS_DISTRO` 来确保版本适配：
 
 ```bash
 sudo apt update
-sudo apt install ros-humble-navigation2 \
-                 ros-humble-nav2-bringup \
-                 ros-humble-gazebo-ros-pkgs \
-                 ros-humble-xacro \
-                 ros-humble-joint-state-publisher \
-                 ros-humble-robot-state-publisher
+sudo apt install ros-${ROS_DISTRO}-navigation2 \
+                 ros-${ROS_DISTRO}-nav2-bringup \
+                 ros-${ROS_DISTRO}-nav2-simple-commander \
+                 ros-${ROS_DISTRO}-gazebo-ros-pkgs \
+                 ros-${ROS_DISTRO}-xacro \
+                 ros-${ROS_DISTRO}-joint-state-publisher \
+                 ros-${ROS_DISTRO}-robot-state-publisher \
+                 ros-${ROS_DISTRO}-tf2-ros \
+                 ros-${ROS_DISTRO}-tf-transformations \
+                 python3-transforms3d
 ```
 
 ---
