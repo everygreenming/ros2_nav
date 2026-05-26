@@ -69,7 +69,7 @@ source install/setup.bash       # 如果是 Linux 终端 (bash)
 ```bash
 ros2 launch bot sim.launch.py
 ```
-*启动后，你将能在 Gazebo 窗口中看到 Fishbot 小车与对应的仿真跑道。*
+*启动后，能在 Gazebo 窗口中看到小车与对应的仿真跑道。*
 
 ### 步骤 2：启动 Nav2 导航与定位系统
 该步骤将加载已建立的静态地图（`fishbot_map`）、AMCL 定位节点、代价地图、路径规划器以及可视化的 RViz 界面。
