@@ -64,17 +64,6 @@ def generate_launch_description():
         output='screen'
     )
 
-    # 5. 控制器加载逻辑 (使用事件处理器确保顺序)
-    load_joint_state_broadcaster = launch.actions.ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'fishbot_joint_state_broadcaster'],
-        output='screen'
-    )
-
-    load_diff_drive_controller = launch.actions.ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'fishbot_diff_drive_controller'],
-        output='screen'
-    )
-
     return launch.LaunchDescription([
         # A. 设置 Gazebo 搜索路径 (环境变量必须最先设置)
         launch.actions.SetEnvironmentVariable(name='GAZEBO_MODEL_PATH', value=combined_model_path),
@@ -83,18 +72,4 @@ def generate_launch_description():
         node_robot_state_publisher,
         action_gazebo,
         node_spawn_entity,
-        
-        # C. 链式启动控制器：空投成功 -> 加载状态广播器 -> 加载差速控制器
-        launch.actions.RegisterEventHandler(
-            event_handler=launch.event_handlers.OnProcessExit(
-                target_action=node_spawn_entity,
-                on_exit=[load_joint_state_broadcaster],
-            )
-        ),
-        launch.actions.RegisterEventHandler(
-            event_handler=launch.event_handlers.OnProcessExit(
-                target_action=load_joint_state_broadcaster,
-                on_exit=[load_diff_drive_controller],
-            )
-        ),
     ])
