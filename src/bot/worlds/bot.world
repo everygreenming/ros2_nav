@@ -8,11 +8,29 @@
       <uri>model://bot_map</uri>
     </include>
 
-   <include>
-      <uri>model://construction_cone</uri>
-      <name>cone_point_2</name>
-      <pose>9.3 2.685 0 0 0 0</pose> 
-    </include>
+    <model name="cone_point_2">
+      <static>true</static>
+      <pose>9.3 2.685 0 0 0 0</pose>
+      <link name="link">
+        <!-- 1. 方形底座物理碰撞体（宽35cm，高20cm，雷达高16.1cm，使得雷达能直接扫出方形轮廓，且物理上能够阻挡小车） -->
+        <collision name="box_collision">
+          <pose>0 0 0.1 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.35 0.35 0.2</size>
+            </box>
+          </geometry>
+        </collision>
+        <!-- 2. 视觉外观（依然加载原本好看的锥桶三维模型） -->
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>model://construction_cone/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
 
 
   <model name="blue_box_baffle">
