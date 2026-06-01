@@ -10,7 +10,7 @@
 
     <model name="cone_point_2">
       <static>true</static>
-      <pose>9.3 2.685 0 0 0 0</pose>
+      <pose>9.3 2.5 0 0 0 0</pose>
       <link name="link">
         <!-- 1. 方形底座物理碰撞体（宽35cm，高60cm，容错雷达高度，使得雷达一定能扫出方形轮廓，且物理上能够阻挡小车） -->
         <collision name="box_collision">
