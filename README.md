@@ -72,7 +72,7 @@ ros2 launch bot sim.launch.py
 *启动后，能在 Gazebo 窗口中看到小车与对应的仿真跑道。*
 
 ### 步骤 2：启动 Nav2 导航与定位系统
-该步骤将加载已建立的静态地图（`fishbot_map`）、AMCL 定位节点、代价地图、路径规划器以及可视化的 RViz 界面。
+该步骤将加载已建立的静态地图（`bot_map`）、AMCL 定位节点、代价地图、路径规划器以及可视化的 RViz 界面。
 ```bash
 ros2 launch bot_nav2 nav2_launch.py
 ```
@@ -98,7 +98,8 @@ ros2 launch waypoint pose_launch.py nav_mode:=follow
 bot_ws/src/
 ├── bot/                              # Gazebo 仿真世界与启动包
 │   ├── launch/
-│   │   └── sim.launch.py             # 仿真总启动脚本 (加载小车模型与仿真环境)
+│   │   ├── sim.launch.py             # 仿真总启动脚本 (加载小车模型与仿真环境)
+│   │   └── total_launch.py           # 一键启动脚本 (同时启动仿真环境和 Nav2 导航系统)
 │   ├── models/bot_map/               # 仿真地图模型文件 (包含 map.stl（在cad绘制） 及纹理配置) 
 │   └── worlds/
 │       └── bot.world                 # 核心物理世界场景定义 
@@ -107,12 +108,17 @@ bot_ws/src/
 │   ├── behavior_trees/
 │   │   └── my_nav_through_poses.xml  # 自定义行为树 (包含清图自愈与特定恢复逻辑)
 │   ├── config/
-│   │   └── nav2_params.yaml          # Nav2 核心调优参数 (包含 AMCL定位、代价地图膨胀、DWB局部规划器等)
+│   │   ├── nav2_amcl.yaml            # AMCL 定位参数配置文件
+│   │   ├── nav2_behaviors.yaml       # 机器人恢复行为参数配置文件
+│   │   ├── nav2_common.yaml          # 通用/静态参数配置文件 (bt_navigator等)
+│   │   ├── nav2_costmaps.yaml        # 代价地图参数配置文件 (local/global costmap)
+│   │   ├── nav2_dwb_controller.yaml  # DWB 局部路径规划器参数配置文件
+│   │   └── nav2_global_planner.yaml  # 全局路径规划器参数配置文件
 │   ├── launch/
-│   │   └── nav2_launch.py            # 导航系统总启动脚本 (加载地图、AMCL与规划器)
+│   │   └── nav2_launch.py            # 导航系统总启动脚本 (动态合并模块化参数并加载地图)
 │   └── maps/
-│       ├── fishbot_map.pgm           # 2D 栅格地图文件
-│       └── fishbot_map.yaml          # 2D 地图元数据 (分辨率、原点等信息)
+│       ├── bot_map.pgm               # 2D 栅格地图文件
+│       └── bot_map.yaml              # 2D 地图元数据 (分辨率、原点等信息)
 │
 ├── fishbot_description/              # 机器人 URDF 描述与物理控制包
 │   ├── config/rviz/
