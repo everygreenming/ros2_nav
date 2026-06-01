@@ -37,7 +37,7 @@ def generate_launch_description():
     use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time', default='true')
     
     map_yaml_path = launch.substitutions.LaunchConfiguration(
-        'map', default=os.path.join(bot_nav2_dir, 'maps', 'fishbot_map.yaml'))
+        'map', default=os.path.join(bot_nav2_dir, 'maps', 'bot_map.yaml'))
         
     # 收集并合并所有的模块化 YAML 配置文件
     config_dir = os.path.join(bot_nav2_dir, 'config')

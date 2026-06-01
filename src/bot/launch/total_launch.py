@@ -16,7 +16,7 @@ def generate_launch_description():
     # 定义 Launch 变量
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     map_yaml_path = LaunchConfiguration(
-        'map', default=os.path.join(bot_nav2_pkg_dir, 'maps', 'fishbot_map.yaml'))
+        'map', default=os.path.join(bot_nav2_pkg_dir, 'maps', 'bot_map.yaml'))
     start_patrol = LaunchConfiguration('start_patrol', default='false')
 
     # 声明命令行参数
