@@ -62,23 +62,41 @@ source install/setup.bash       # 如果是 Linux 终端 (bash)
 
 ##  核心功能运行指南
 
-项目支持模块化启动，请严格按照以下三个步骤，在三个不同的终端窗口中分别运行。
+项目支持 **一键启动（推荐）** 或 **模块化逐步启动**。
 
-### 步骤 1：启动 Gazebo 仿真环境与小车模型
+### 选项 1：一键启动（推荐）
+如果您希望同时开启仿真环境、加载地图以及启动导航系统与 RViz，可以在终端中直接运行：
+```bash
+# 启动仿真环境 + Nav2 导航系统 + RViz 界面
+ros2 launch bot total_launch.py
+```
+*   **若想启动的同时自动开启多点巡航**，可以加上 `start_patrol:=true` 参数：
+    ```bash
+    ros2 launch bot total_launch.py start_patrol:=true
+    ```
+*   **若想指定加载其他地图**，可以使用 `map` 参数：
+    ```bash
+    ros2 launch bot total_launch.py map:=/path/to/your/map.yaml
+    ```
+
+### 选项 2：模块化逐步启动
+如果您需要进行分步调试，可以在不同的终端窗口中分别运行以下三个步骤。
+
+#### 步骤 1：启动 Gazebo 仿真环境与小车模型
 该步骤将加载小车 URDF、斑马线地图、锥桶等物理障碍物，并启动仿真物理引擎。
 ```bash
 ros2 launch bot sim.launch.py
 ```
 *启动后，能在 Gazebo 窗口中看到小车与对应的仿真跑道。*
 
-### 步骤 2：启动 Nav2 导航与定位系统
+#### 步骤 2：启动 Nav2 导航与定位系统
 该步骤将加载已建立的静态地图（`bot_map`）、AMCL 定位节点、代价地图、路径规划器以及可视化的 RViz 界面。
 ```bash
 ros2 launch bot_nav2 nav2_launch.py
 ```
 进入后可以在rviz中手动初始化位姿（2D Pose Estimate）,使用nav goal进行单点导航，使用自带的nav through手动设置路点进行多点导航。
 
-### 步骤 3：启动多点巡航/导航控制脚本
+#### 步骤 3：启动多点巡航/导航控制脚本
 该节点通过 Python 代码向 Nav2 自动下发预设的 8 个目标点坐标，并初始化位姿，同时开始自动导航。
 ```bash
 # 模式 A(默认模式）：Through 连续穿越模式（推荐，行进极其连贯平滑）
@@ -86,7 +104,6 @@ ros2 launch waypoint pose_launch.py
 
 # 模式 B：Follow 单点停靠模式（含 1.0米 提前平滑切弯）
 ros2 launch waypoint pose_launch.py nav_mode:=follow
-
 ```
 
 ---
