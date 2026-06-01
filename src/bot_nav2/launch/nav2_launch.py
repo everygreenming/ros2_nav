@@ -1,9 +1,25 @@
 import os
+import yaml
+import tempfile
 import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from nav2_common.launch import RewrittenYaml
+
+def merge_yaml_files(yaml_files):
+    merged_dict = {}
+    for yaml_file in yaml_files:
+        with open(yaml_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+            if data:
+                merged_dict.update(data)
+    
+    # Create a temporary file to store the merged yaml
+    tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.yaml')
+    yaml.dump(merged_dict, tmp_file, default_flow_style=False)
+    tmp_file.close()
+    return tmp_file.name
 
 def generate_launch_description():
     # 1. 获取与拼接默认路径
@@ -23,12 +39,22 @@ def generate_launch_description():
     map_yaml_path = launch.substitutions.LaunchConfiguration(
         'map', default=os.path.join(bot_nav2_dir, 'maps', 'fishbot_map.yaml'))
         
-    nav2_param_path = os.path.join(bot_nav2_dir, 'config', 'nav2_params.yaml')
+    # 收集并合并所有的模块化 YAML 配置文件
+    config_dir = os.path.join(bot_nav2_dir, 'config')
+    yaml_files_to_merge = [
+        os.path.join(config_dir, 'nav2_amcl.yaml'),
+        os.path.join(config_dir, 'nav2_dwb_controller.yaml'),
+        os.path.join(config_dir, 'nav2_global_planner.yaml'),
+        os.path.join(config_dir, 'nav2_costmaps.yaml'),
+        os.path.join(config_dir, 'nav2_behaviors.yaml'),
+        os.path.join(config_dir, 'nav2_common.yaml')
+    ]
+    merged_nav2_param_path = merge_yaml_files(yaml_files_to_merge)
 
     # 4. 使用 RewrittenYaml 动态注入行为树路径
-    #    这样 nav2_params.yaml 中的空字符串会被替换为实际的 install 路径
+    #    这样合并后文件中的空字符串会被替换为实际的 install 路径
     configured_params = RewrittenYaml(
-        source_file=nav2_param_path,
+        source_file=merged_nav2_param_path,
         param_rewrites={
             'default_nav_through_poses_bt_xml': bt_xml_path
         },
