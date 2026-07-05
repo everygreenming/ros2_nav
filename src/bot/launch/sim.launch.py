@@ -59,7 +59,7 @@ def generate_launch_description():
             '-entity', 'fishbot',
             '-x', '0.3814',
             '-y', '3.4835',
-            '-z', '0.1' # 稍微抬高一点，防止和地面发生初始碰撞导致飞掉
+            '-z', '0.15' # 稍微抬高一点，防止和地面发生初始碰撞导致飞掉
         ],
         output='screen'
     )

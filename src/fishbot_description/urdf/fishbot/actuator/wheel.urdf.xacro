@@ -24,8 +24,8 @@
             <xacro:cylinder_inertia m="0.5" h="${length}" r="${radius}"/>
         </link>
         <gazebo reference="${wheel_name}_wheel_link">
-            <mu1 value="20.0" />
-            <mu2 value="20.0" />
+            <mu1 value="1.0" />
+            <mu2 value="1.0" />
             <kp value="1000000000.0" />
             <kd value="1.0" />
         </gazebo>

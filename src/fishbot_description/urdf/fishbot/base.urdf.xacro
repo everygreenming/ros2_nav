@@ -29,7 +29,7 @@
                     <color rgba="0.1 0.1 1.0 0.5"/>
                 </material>
             </collision>
-            <xacro:box_inertia m="5.0" w="${width}" h="${length}" d="${depth}"/>
+            <xacro:box_inertia m="5.0" w="${depth}" h="${width}" d="${length}"/>
         </link>
 
     </xacro:macro>
