@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
    <xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro" />
-    <xacro:macro name="base_xacro" params="length width depth wheel_radius">
+    <xacro:macro name="base_xacro" params="length width depth wheel_radius x_offset">
      <link name="base_footprint" />
 
         <joint name="base_joint" type="fixed">
@@ -12,7 +12,7 @@
 
         <link name="base_link">
             <visual>
-                <origin xyz="0 0 0.0" rpy="0 0 0" />
+                <origin xyz="${x_offset} 0 0.0" rpy="0 0 0" />
                 <geometry>
                     <box size="${depth} ${width} ${length}" />
                 </geometry>
@@ -21,7 +21,7 @@
                 </material>
             </visual>
             <collision>
-                <origin xyz="0 0 0.0" rpy="0 0 0" />
+                <origin xyz="${x_offset} 0 0.0" rpy="0 0 0" />
                 <geometry>
                     <box size="${depth} ${width} ${length}" />
                 </geometry>
@@ -29,7 +29,13 @@
                     <color rgba="0.1 0.1 1.0 0.5"/>
                 </material>
             </collision>
-            <xacro:box_inertia m="5.0" w="${depth}" h="${width}" d="${length}"/>
+            <inertial>
+                <origin xyz="${x_offset} 0 0.0" rpy="0 0 0" />
+                <mass value="5.0" />
+                <inertia ixx="${(5.0/12.0) * (width*width + length*length)}" ixy="0.0" ixz="0.0" 
+                         iyy="${(5.0/12.0) * (depth*depth + length*length)}" iyz="0.0" 
+                         izz="${(5.0/12.0) * (depth*depth + width*width)}" />
+            </inertial>
         </link>
 
     </xacro:macro>
