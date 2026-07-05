@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
    <xacro:include filename="$(find fishbot_description)/urdf/fishbot/common_inertia.xacro" />
-    <xacro:macro name="wheel_xacro" params="wheel_name xyz">
+    <xacro:macro name="wheel_xacro" params="wheel_name xyz radius length">
         <link name="${wheel_name}_wheel_link">
             <visual>
                 <origin xyz="0 0 0" rpy="1.57079 0 0" />
                 <geometry>
-                    <cylinder length="0.04" radius="0.032" />
+                    <cylinder length="${length}" radius="${radius}" />
                 </geometry>
                 <material name="black">
                     <color rgba="0.0 0.0 0.0 0.8"/>
@@ -15,13 +15,13 @@
             <collision>
                 <origin xyz="0 0 0" rpy="1.57079 0 0" />
                 <geometry>
-                    <cylinder length="0.04" radius="0.032" />
+                    <cylinder length="${length}" radius="${radius}" />
                 </geometry>
                 <material name="black">
                     <color rgba="0.0 0.0 0.0 0.8"/>
                 </material>
             </collision>
-            <xacro:cylinder_inertia m="0.1" h="0.04" r="0.032"/>
+            <xacro:cylinder_inertia m="0.5" h="${length}" r="${radius}"/>
         </link>
         <gazebo reference="${wheel_name}_wheel_link">
             <mu1 value="20.0" />
