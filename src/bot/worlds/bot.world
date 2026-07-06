@@ -1,6 +1,19 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
+    <!-- 让 Gazebo 视角跟随小车背后上方 -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <track_visual>
+          <name>fishbot</name> <!-- 追踪的小车实体名称 -->
+          <static>true</static>
+          <use_model_frame>true</use_model_frame>
+          <xyz>-1.8 0 0.9</xyz> <!-- 相机在小车局部坐标系下的相对位置：后方1.8m，上方0.9m -->
+          <inherit_orientation>true</inherit_orientation> <!-- 继承旋转朝向，随小车转弯 -->
+        </track_visual>
+      </camera>
+    </gui>
+
     <include>
       <uri>model://sun</uri>
     </include>
