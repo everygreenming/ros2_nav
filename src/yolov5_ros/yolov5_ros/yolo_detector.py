@@ -8,6 +8,7 @@ import cv2
 
 import rclpy
 from rclpy.node import Node
+from rclpy.parameter import Parameter
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 from cv_bridge import CvBridge
@@ -33,7 +34,9 @@ class YoloDetectorNode(Node):
 
         # 声明 ROS 2 参数
         self.declare_parameter('model_path', 'yolov5s.onnx')
-        self.declare_parameter('classes', [])
+        # 显式使用 Parameter.Type.STRING_ARRAY 声明 classes 参数，防止 rclpy 将默认空列表 [] 错误推导为 BYTE_ARRAY
+        classes_param = Parameter('classes', Parameter.Type.STRING_ARRAY, [])
+        self.declare_parameter(classes_param.name, classes_param.get_parameter_value())
         self.declare_parameter('conf_threshold', 0.25)
         self.declare_parameter('score_threshold', 0.25)
         self.declare_parameter('nms_threshold', 0.45)
