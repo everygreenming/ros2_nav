@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 import rclpy
+import numpy as np
+# 兼容性补丁：NumPy 1.24+ 移除了 np.float，但 ROS 2 依赖的 transforms3d 仍在使用它
+if not hasattr(np, 'float'):
+    np.float = float
+
 from geometry_msgs.msg import PoseStamped, Pose
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 from tf2_ros import TransformListener, Buffer
