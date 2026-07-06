@@ -210,3 +210,37 @@ colcon build --packages-select bot_nav2
 ```
 ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
 pip3 install --force-reinstall "numpy<2"
+ros2 launch waypoint pose_launch.py
+[INFO] [launch]: All log files can be found below /home/everygreen/.ros/log/2026-07-06-17-56-00-646399-everygreen-VirtualBox-48588
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [mutil_pose-1]: process started with pid [48605]
+[mutil_pose-1] Traceback (most recent call last):
+[mutil_pose-1]   File "/home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint/mutil_pose", line 33, in <module>
+[mutil_pose-1]     sys.exit(load_entry_point('waypoint==0.0.0', 'console_scripts', 'mutil_pose')())
+[mutil_pose-1]   File "/home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint/mutil_pose", line 25, in importlib_load_entry_point
+[mutil_pose-1]     return next(matches).load()
+[mutil_pose-1]   File "/usr/lib/python3.10/importlib/metadata/__init__.py", line 171, in load
+[mutil_pose-1]     module = import_module(match.group('module'))
+[mutil_pose-1]   File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+[mutil_pose-1]     return _bootstrap._gcd_import(name[level:], package, level)
+[mutil_pose-1]   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+[mutil_pose-1]   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+[mutil_pose-1]   File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+[mutil_pose-1]   File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+[mutil_pose-1]   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+[mutil_pose-1]   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+[mutil_pose-1]   File "/home/everygreen/ros2/bot_ws/install/waypoint/lib/python3.10/site-packages/waypoint/mutil_pose.py", line 6, in <module>
+[mutil_pose-1]     from tf_transformations import euler_from_quaternion, quaternion_from_euler
+[mutil_pose-1]   File "/opt/ros/humble/lib/python3.10/site-packages/tf_transformations/__init__.py", line 46, in <module>
+[mutil_pose-1]     import transforms3d
+[mutil_pose-1]   File "/usr/lib/python3/dist-packages/transforms3d/__init__.py", line 10, in <module>
+[mutil_pose-1]     from . import quaternions
+[mutil_pose-1]   File "/usr/lib/python3/dist-packages/transforms3d/quaternions.py", line 26, in <module>
+[mutil_pose-1]     _MAX_FLOAT = np.maximum_sctype(np.float)
+[mutil_pose-1]   File "/home/everygreen/.local/lib/python3.10/site-packages/numpy/__init__.py", line 324, in __getattr__
+[mutil_pose-1]     raise AttributeError(__former_attrs__[attr])
+[mutil_pose-1] AttributeError: module 'numpy' has no attribute 'float'.
+[mutil_pose-1] `np.float` was a deprecated alias for the builtin `float`. To avoid this error in existing code, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+[mutil_pose-1] The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+[mutil_pose-1]     https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations. Did you mean: 'cfloat'?
+[ERROR] [mutil_pose-1]: process has died [pid 48605, exit code 1, cmd '/home/everygreen/ros2/bot_ws/install/waypoint/lib/waypoint/mutil_pose --ros-args -r __node:=patrol_node --params-file /home/everygreen/ros2/bot_ws/install/waypoint/share/waypoint/config/waypoints.yaml --params-file /tmp/launch_params_eku3vgb4'].
