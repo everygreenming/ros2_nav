@@ -5,16 +5,20 @@
     <link name="link">
       <collision name="collision">
         <geometry>
-          <cylinder>
-            <radius>0.3</radius>
-            <length>2.0</length>
-          </cylinder>
+          <!-- 底座为方形，暂定尺寸为 x=0.4m, y=0.4m, z=2.0m -->
+          <box>
+            <size>0.4 0.4 2.0</size>
+          </box>
         </geometry>
       </collision>
       <visual name="visual">
+        <!-- 绕 X 轴旋转 90 度让它站立 -->
+        <pose>0 0 0 1.5708 0 0</pose>
         <geometry>
           <mesh>
             <uri>model://city_traffic_light/meshes/city_traffic_light/result.dae</uri>
+            <!-- 缩放比例设为原模型大小的 1% -->
+            <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
