@@ -23,7 +23,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'yolo_detector = yolov5_ros.yolo_detector:main'
+            'yolo_detector = yolov5_ros.yolo_detector:main',
+            'image_collector = yolov5_ros.image_collector:main'
         ],
     },
 )
