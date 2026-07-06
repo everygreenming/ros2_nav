@@ -47,6 +47,7 @@ class YoloDetectorNode(Node):
         self.declare_parameter('conf_threshold', 0.25)
         self.declare_parameter('score_threshold', 0.25)
         self.declare_parameter('nms_threshold', 0.45)
+        self.declare_parameter('input_size', 416)
 
         # 获取参数
         self.model_name = self.get_parameter('model_path').value
@@ -54,6 +55,7 @@ class YoloDetectorNode(Node):
         self.conf_threshold = self.get_parameter('conf_threshold').value
         self.score_threshold = self.get_parameter('score_threshold').value
         self.nms_threshold = self.get_parameter('nms_threshold').value
+        self.input_size = self.get_parameter('input_size').value
 
         # 决定类别列表
         if len(self.custom_classes) > 0:
@@ -171,8 +173,8 @@ class YoloDetectorNode(Node):
 
         img_height, img_width = cv_image.shape[:2]
 
-        # 2. 预处理图像为 YOLOv5 尺寸（640x640）
-        blob = cv2.dnn.blobFromImage(cv_image, 1.0 / 255.0, (640, 640), swapRB=True, crop=False)
+        # 2. 预处理图像为 YOLOv5 尺寸（动态参数，默认 416x416）
+        blob = cv2.dnn.blobFromImage(cv_image, 1.0 / 255.0, (self.input_size, self.input_size), swapRB=True, crop=False)
 
         # 3. 前向推理
         if self.use_ort:
@@ -204,8 +206,8 @@ class YoloDetectorNode(Node):
         confidences = []
         class_ids = []
 
-        x_factor = img_width / 640.0
-        y_factor = img_height / 640.0
+        x_factor = img_width / float(self.input_size)
+        y_factor = img_height / float(self.input_size)
 
         if len(filtered_preds) > 0:
             # 获取类别预测得分（从 6th column 开始）
