@@ -36,11 +36,13 @@ class ImageCollectorNode(Node):
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir, exist_ok=True)
             self.get_logger().info(f"Created save directory: {self.save_dir}")
+            self.img_counter = 0
         else:
             self.get_logger().info(f"Saving images to existing directory: {self.save_dir}")
+            # 扫描已有图片，找到最大序号以防覆盖旧图片
+            self.img_counter = self.get_existing_max_index()
             
         self.bridge = CvBridge()
-        self.img_counter = 0
         self.last_save_time = time.time()
         
         # 订阅相机图像话题
@@ -52,6 +54,29 @@ class ImageCollectorNode(Node):
         )
         
         self.get_logger().info(f"Image collector is ready! Interval: {self.save_interval}s, Target: {self.save_dir}")
+
+    def get_existing_max_index(self):
+        """
+        扫描保存目录，找到已存在的最大图片序号
+        """
+        try:
+            files = os.listdir(self.save_dir)
+            indices = []
+            for f in files:
+                if f.startswith('frame_') and f.endswith('.jpg'):
+                    try:
+                        # 提取 frame_000120.jpg 中的 120
+                        num = int(f.split('_')[1].split('.')[0])
+                        indices.append(num)
+                    except (IndexError, ValueError):
+                        continue
+            if indices:
+                max_idx = max(indices)
+                self.get_logger().info(f"Found {len(indices)} existing frames. Resuming count from index {max_idx}...")
+                return max_idx
+        except Exception as e:
+            self.get_logger().warn(f"Failed to scan directory for index: {str(e)}")
+        return 0
         
     def image_callback(self, msg):
         current_time = time.time()
