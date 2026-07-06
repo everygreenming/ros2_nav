@@ -5,7 +5,7 @@
     <gui fullscreen='0'>
       <camera name='user_camera'>
         <track_visual>
-          <name>fishbot</name> <!-- 追踪的小车实体名称 -->
+          <name>bot</name> <!-- 追踪的小车实体名称 -->
           <static>true</static>
           <use_model_frame>true</use_model_frame>
           <xyz>-1.8 0 3.0</xyz> <!-- 相机在小车局部坐标系下的相对位置：后方1.8m，上方0.9m -->

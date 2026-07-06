@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bot">
+    <xacro:include filename="$(find bot_description)/urdf/bot/base.urdf.xacro" />
+    
+    <!-- 传感器组件 -->
+    <xacro:include filename="$(find bot_description)/urdf/bot/sensor/imu.urdf.xacro" />
+    <xacro:include filename="$(find bot_description)/urdf/bot/sensor/laser.urdf.xacro" />
+    <xacro:include filename="$(find bot_description)/urdf/bot/sensor/camera.urdf.xacro" />
+    
+    <!-- 执行器组件 -->
+    <xacro:include filename="$(find bot_description)/urdf/bot/actuator/wheel.urdf.xacro" />
+    <xacro:include filename="$(find bot_description)/urdf/bot/actuator/caster.urdf.xacro" />
+
+    <!-- 组件装配与位置定义 -->
+    <xacro:base_xacro length="0.20" width="0.30" depth="0.45" wheel_radius="0.08" x_offset="-0.125" />
+    <xacro:imu_xacro xyz="-0.125 0 0.02" />
+    <xacro:laser_xacro xyz="0 0 0.125" />
+    <xacro:camera_xacro xyz="0.11 0 0.0" />
+    
+    <!-- 差速驱动双轮与单后万向轮 -->
+    <xacro:wheel_xacro wheel_name="left" xyz="0.0 0.18 -0.10" radius="0.08" length="0.06" />
+    <xacro:wheel_xacro wheel_name="right" xyz="0.0 -0.18 -0.10" radius="0.08" length="0.06" />
+    <xacro:caster_xacro caster_name="rear" xyz="-0.30 0.0 -0.15" />
+    
+    <!-- Gazebo 插件 -->
+    <xacro:include filename="$(find bot_description)/urdf/bot/plugins/gazebo_control_plugin.xacro" />
+    <xacro:gazebo_control_plugin />
+    <xacro:include filename="$(find bot_description)/urdf/bot/plugins/gazebo_sensor_plugin.xacro" />
+    <xacro:gazebo_sensor_plugin />
+</robot>

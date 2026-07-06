@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(bot_nav2)
+project(bot_description)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -10,28 +10,6 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
-# 安装 launch 文件夹下的所有文件
-install(DIRECTORY
-  launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
-# 安装 config 文件夹下的所有文件（存放你的 params.yaml）
-install(DIRECTORY
-  config
-  DESTINATION share/${PROJECT_NAME}
-)
-
-
-install(DIRECTORY
-  maps
-  behavior_trees
-  rviz
-  DESTINATION share/${PROJECT_NAME}
-)
-
-
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -44,5 +22,11 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+
+install(DIRECTORY  urdf config 
+  DESTINATION share/${PROJECT_NAME}
+)
+
 
 ament_package()

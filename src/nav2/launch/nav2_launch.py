@@ -15,36 +15,32 @@ def merge_yaml_files(yaml_files):
             if data:
                 merged_dict.update(data)
     
-    # Create a temporary file to store the merged yaml
     tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.yaml')
     yaml.dump(merged_dict, tmp_file, default_flow_style=False)
     tmp_file.close()
     return tmp_file.name
 
 def generate_launch_description():
-    # 1. 获取与拼接默认路径
-    bot_nav2_dir = get_package_share_directory('bot_nav2')
+    # 路径解析
+    nav2_pkg_dir = get_package_share_directory('nav2')
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
     
-    # 优先加载 bot_nav2 包下的自定义 rviz 配置，如果不存在则退回官方 default
-    custom_rviz_config_dir = os.path.join(bot_nav2_dir, 'rviz', 'nav2.rviz')
+    # 优先加载自定义 rviz 配置
+    custom_rviz_config_dir = os.path.join(nav2_pkg_dir, 'rviz', 'nav2.rviz')
     if os.path.exists(custom_rviz_config_dir):
         rviz_config_dir = custom_rviz_config_dir
     else:
         rviz_config_dir = os.path.join(nav2_bringup_dir, 'rviz', 'nav2_default_view.rviz')
     
-    # 2. 动态解析自定义行为树路径（关键改动）
-    bt_xml_path = os.path.join(
-        bot_nav2_dir, 'behavior_trees', 'my_nav_through_poses.xml')
+    bt_xml_path = os.path.join(nav2_pkg_dir, 'behavior_trees', 'my_nav_through_poses.xml')
 
-    # 3. 创建 Launch 配置变量
+    # Launch 配置参数
     use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time', default='true')
-    
     map_yaml_path = launch.substitutions.LaunchConfiguration(
-        'map', default=os.path.join(bot_nav2_dir, 'maps', 'bot_map.yaml'))
+        'map', default=os.path.join(nav2_pkg_dir, 'maps', 'bot_map.yaml'))
         
-    # 收集并合并所有的模块化 YAML 配置文件
-    config_dir = os.path.join(bot_nav2_dir, 'config')
+    # 合并所有的模块化配置文件
+    config_dir = os.path.join(nav2_pkg_dir, 'config')
     yaml_files_to_merge = [
         os.path.join(config_dir, 'nav2_amcl.yaml'),
         os.path.join(config_dir, 'nav2_dwb_controller.yaml'),
@@ -55,24 +51,20 @@ def generate_launch_description():
     ]
     merged_nav2_param_path = merge_yaml_files(yaml_files_to_merge)
 
-    # 4. 使用 RewrittenYaml 动态注入行为树路径
-    #    这样合并后文件中的空字符串会被替换为实际的 install 路径
+    # 动态注入行为树路径
     configured_params = RewrittenYaml(
         source_file=merged_nav2_param_path,
-        param_rewrites={
-            'default_nav_through_poses_bt_xml': bt_xml_path
-        },
+        param_rewrites={'default_nav_through_poses_bt_xml': bt_xml_path},
         convert_types=True
     )
 
     return launch.LaunchDescription([
-        # 5. 声明新的 Launch 参数，暴露给命令行
         launch.actions.DeclareLaunchArgument('use_sim_time', default_value=use_sim_time,
                                              description='Use simulation (Gazebo) clock if true'),
         launch.actions.DeclareLaunchArgument('map', default_value=map_yaml_path,
                                              description='Full path to map file to load'),
 
-        # 6. 包含 Nav2 核心启动脚本（使用动态注入后的参数文件）
+        # 包含 Nav2 官方 bringup 启动脚本并传入合并参数
         launch.actions.IncludeLaunchDescription(
             PythonLaunchDescriptionSource([nav2_bringup_dir, '/launch', '/bringup_launch.py']),
             launch_arguments={
@@ -84,7 +76,7 @@ def generate_launch_description():
                 'initial_pose_yaw': '0.0'}.items(),
         ),
         
-        # 7. 启动 RViz2
+        # 启动 RViz2 可视化
         launch_ros.actions.Node(
             package='rviz2',
             executable='rviz2',

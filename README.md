@@ -68,15 +68,15 @@ source install/setup.bash       # 如果是 Linux 终端 (bash)
 如果您希望同时开启仿真环境、加载地图以及启动导航系统与 RViz，可以在终端中直接运行：
 ```bash
 # 启动仿真环境 + Nav2 导航系统 + RViz 界面
-ros2 launch bot total_launch.py
+ros2 launch gazebo total_launch.py
 ```
 *   **若想启动的同时自动开启多点巡航**，可以加上 `start_patrol:=true` 参数：
     ```bash
-    ros2 launch bot total_launch.py start_patrol:=true
+    ros2 launch gazebo total_launch.py start_patrol:=true
     ```
 *   **若想指定加载其他地图**，可以使用 `map` 参数：
     ```bash
-    ros2 launch bot total_launch.py map:=/path/to/your/map.yaml
+    ros2 launch gazebo total_launch.py map:=/path/to/your/map.yaml
     ```
 
 ### 选项 2：模块化逐步启动
@@ -85,14 +85,14 @@ ros2 launch bot total_launch.py
 #### 步骤 1：启动 Gazebo 仿真环境与小车模型
 该步骤将加载小车 URDF、斑马线地图、锥桶等物理障碍物，并启动仿真物理引擎。
 ```bash
-ros2 launch bot sim.launch.py
+ros2 launch gazebo sim.launch.py
 ```
 *启动后，能在 Gazebo 窗口中看到小车与对应的仿真跑道。*
 
 #### 步骤 2：启动 Nav2 导航与定位系统
 该步骤将加载已建立的静态地图（`bot_map`）、AMCL 定位节点、代价地图、路径规划器以及可视化的 RViz 界面。
 ```bash
-ros2 launch bot_nav2 nav2_launch.py
+ros2 launch nav2 nav2_launch.py
 ```
 进入后可以在rviz中手动初始化位姿（2D Pose Estimate）,使用nav goal进行单点导航，使用自带的nav through手动设置路点进行多点导航。
 
@@ -113,15 +113,15 @@ ros2 launch waypoint pose_launch.py nav_mode:=follow
 
 ```text
 bot_ws/src/
-├── bot/                              # Gazebo 仿真世界与启动包
+├── gazebo/                           # Gazebo 仿真世界与启动包
 │   ├── launch/
 │   │   ├── sim.launch.py             # 仿真总启动脚本 (加载小车模型与仿真环境)
 │   │   └── total_launch.py           # 一键启动脚本 (同时启动仿真环境和 Nav2 导航系统)
-│   ├── models/bot_map/               # 仿真地图模型文件 (包含 map.stl（在cad绘制） 及纹理配置) 
+│   ├── models/bot_map/               # 仿真地图模型文件 (包含 map.stl 及纹理配置) 
 │   └── worlds/
 │       └── bot.world                 # 核心物理世界场景定义 
 │
-├── bot_nav2/                         # Navigation2 导航配置核心包
+├── nav2/                             # Navigation2 导航配置核心包
 │   ├── behavior_trees/
 │   │   └── my_nav_through_poses.xml  # 自定义行为树 (包含清图自愈与特定恢复逻辑)
 │   ├── config/
@@ -137,11 +137,11 @@ bot_ws/src/
 │       ├── bot_map.pgm               # 2D 栅格地图文件
 │       └── bot_map.yaml              # 2D 地图元数据 (分辨率、原点等信息)
 │
-├── fishbot_description/              # 机器人 URDF 描述与物理控制包
+├── bot_description/                  # 机器人 URDF 描述与物理控制包
 │   ├── config/rviz/
 │   │   └── dispaly_model.rviz        # RViz 可视化预设配置
-│   └── urdf/fishbot/
-│       ├── fishbot.urdf.xacro        # 小车 URDF 主入口文件
+│   └── urdf/bot/
+│       ├── bot.urdf.xacro            # 小车 URDF 主入口文件
 │       ├── base.urdf.xacro           # 底盘几何定义
 │       ├── common_inertia.xacro      # 惯性矩阵通用宏
 │       ├── actuator/
@@ -152,7 +152,7 @@ bot_ws/src/
 │       │   ├── camera.urdf.xacro     # 深度相机结构
 │       │   └── imu.urdf.xacro        # IMU 传感器结构
 │       └── plugins/
-│           ├── gazebo_control_plugin.xacro # 差速控制真值插件 (解决里程计漂移的关键)
+│           ├── gazebo_control_plugin.xacro # 差速控制真值插件
 │           └── gazebo_sensor_plugin.xacro  # 传感器仿真数据输出插件
 │
 └── waypoint/                         # 自动多点巡航控制算法包
@@ -168,7 +168,7 @@ bot_ws/src/
 ```
 
 ## 特别说明
-* 由于比赛中将使用实车，所以小车采用的是鱼香ros提供的开源代码，但是对激光雷达安装位置进行了降低，从而更好地实现避障。并将里程计来源更改为gazebo坐标系，使定位更精准。同时提高了小车的扭矩，提升了速度性能，完成导航项目大概在24s左右，仿真数据显示速度基本在1.5m/s左右。
+* 由于比赛中将使用实车，所以小车采用的是开源底盘模型，但是对激光雷达安装位置进行了降低，从而更好地实现避障。并将里程计来源更改为gazebo坐标系，使定位更精准。同时提高了小车的扭矩，提升了速度性能，完成导航项目大概在24s左右，仿真数据显示速度基本在1.5m/s左右。
 * 由于gazebo中的锥桶底部是方形，导致小车在高速下，进行极端避障测试时（设置离锥桶很近的导航点）会出现小车撞到锥桶底座的情况，由于物理限制，激光雷达高度不能再低，所以将锥桶的碰撞箱更改为矩形，从而实现更好的避障。（或者采用深度相机，进行辅助避障；将yolo部署到小车中等方法）。
 
 ---
@@ -179,7 +179,7 @@ bot_ws/src/
 
 ### 1. 启动 Gazebo 仿真环境 (终端 1)
 ```bash
-ros2 launch bot sim.launch.py
+ros2 launch gazebo sim.launch.py
 ```
 
 ### 2. 启动 SLAM 建图节点 (终端 2)
@@ -199,14 +199,14 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 *(使用键盘控制小车在仿真环境中缓慢行驶，扫描完全部的障碍物和边界)*
 
 ### 5. 保存地图 (终端 5)
-建图完成后，运行以下命令保存地图（会自动覆盖 `src/bot_nav2/maps/` 下的旧地图）：
+建图完成后，运行以下命令保存地图（会自动覆盖 `src/nav2/maps/` 下的旧地图）：
 ```bash
-ros2 run nav2_map_server map_saver_cli -f ~/Desktop/bot_ws/src/bot_nav2/maps/bot_map
+ros2 run nav2_map_server map_saver_cli -f ~/Desktop/bot_ws/src/nav2/maps/bot_map
 ```
 
 ### 6. 重新编译工作空间以刷新地图安装文件
 ```bash
-colcon build --packages-select bot_nav2
+colcon build --packages-select nav2
 ```
 ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
 pip3 install --force-reinstall "numpy<2"

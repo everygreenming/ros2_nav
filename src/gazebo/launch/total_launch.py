@@ -9,14 +9,14 @@ from launch.conditions import IfCondition
 
 def generate_launch_description():
     # 获取各个功能包的 share 路径
-    bot_pkg_dir = get_package_share_directory('bot')
-    bot_nav2_pkg_dir = get_package_share_directory('bot_nav2')
+    gazebo_pkg_dir = get_package_share_directory('gazebo')
+    nav2_pkg_dir = get_package_share_directory('nav2')
     waypoint_pkg_dir = get_package_share_directory('waypoint')
 
     # 定义 Launch 变量
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     map_yaml_path = LaunchConfiguration(
-        'map', default=os.path.join(bot_nav2_pkg_dir, 'maps', 'bot_map.yaml'))
+        'map', default=os.path.join(nav2_pkg_dir, 'maps', 'bot_map.yaml'))
     start_patrol = LaunchConfiguration('start_patrol', default='false')
 
     # 声明命令行参数
@@ -35,17 +35,17 @@ def generate_launch_description():
         description='Whether to start the waypoint patrol node automatically (true/false)'
     )
 
-    # 1. 启动 Gazebo 仿真环境（包括小车模型加挂、小车空投、环境加载）
+    # 1. 启动 Gazebo 仿真环境
     launch_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(bot_pkg_dir, 'launch', 'sim.launch.py')
+            os.path.join(gazebo_pkg_dir, 'launch', 'sim.launch.py')
         )
     )
 
-    # 2. 启动 Nav2 导航框架（包括 AMCL 定位、Costmaps 代价地图、Planners 规划器、RViz 可视化）
+    # 2. 启动 Nav2 导航框架与 RViz2 可视化
     launch_nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(bot_nav2_pkg_dir, 'launch', 'nav2_launch.py')
+            os.path.join(nav2_pkg_dir, 'launch', 'nav2_launch.py')
         ),
         launch_arguments={
             'use_sim_time': use_sim_time,
@@ -53,7 +53,7 @@ def generate_launch_description():
         }.items()
     )
 
-    # 3. 启动多点巡航脚本（可选，默认关闭）
+    # 3. 启动多点巡航脚本（按需，默认关闭）
     launch_waypoint = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(waypoint_pkg_dir, 'launch', 'pose_launch.py')
@@ -62,17 +62,10 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        # 声明参数
         declare_use_sim_time,
         declare_map,
         declare_start_patrol,
-        
-        # 启动仿真
         launch_sim,
-        
-        # 启动导航
         launch_nav2,
-        
-        # 启动巡航节点（按需）
         launch_waypoint
     ])
