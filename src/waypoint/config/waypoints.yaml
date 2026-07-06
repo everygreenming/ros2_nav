@@ -1,6 +1,6 @@
 patrol_node:
   ros__parameters:
-    initial_point: [0.3814, 3.4835, 0.0]
+    initial_point: [0.0, 0.0, 0.0]
     # 格式: [X, Y, Yaw(弧度)]
     target_points: [
      0.000,   0.000,   0.000,
