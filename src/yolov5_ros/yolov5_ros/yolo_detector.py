@@ -8,6 +8,13 @@ import cv2
 
 import rclpy
 from rclpy.node import Node
+
+# 尝试导入 onnxruntime 作为首选推理引擎，以规避 OpenCV 旧版本的 ONNX 算子兼容问题
+try:
+    import onnxruntime as ort
+    HAS_ORT = True
+except ImportError:
+    HAS_ORT = False
 from rclpy.parameter import Parameter
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
@@ -64,14 +71,31 @@ class YoloDetectorNode(Node):
 
         # 加载 ONNX 模型
         self.get_logger().info(f'Loading ONNX model: {self.model_file}')
-        try:
-            self.net = cv2.dnn.readNetFromONNX(self.model_file)
-            # 开启硬件加速（如果可用，在 CPU 上这能启用加速计算）
-            self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-            self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
-        except Exception as e:
-            self.get_logger().error(f'Failed to load ONNX model: {str(e)}')
-            sys.exit(1)
+        self.use_ort = False
+
+        if HAS_ORT:
+            try:
+                self.get_logger().info('onnxruntime is available. Loading model with ONNX Runtime...')
+                # 强行指定使用 CPU 执行器
+                self.ort_session = ort.InferenceSession(self.model_file, providers=['CPUExecutionProvider'])
+                self.ort_input_name = self.ort_session.get_inputs()[0].name
+                self.use_ort = True
+                self.get_logger().info('Model loaded successfully with ONNX Runtime.')
+            except Exception as e:
+                self.get_logger().warn(f'Failed to load model using ONNX Runtime: {str(e)}. Falling back to OpenCV DNN...')
+
+        if not self.use_ort:
+            try:
+                self.get_logger().info('Loading model with OpenCV DNN...')
+                self.net = cv2.dnn.readNetFromONNX(self.model_file)
+                # 开启硬件加速（如果可用，在 CPU 上这能启用加速计算）
+                self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+                self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+                self.get_logger().info('Model loaded successfully with OpenCV DNN.')
+            except Exception as e:
+                self.get_logger().error(f'Failed to load ONNX model using OpenCV DNN: {str(e)}')
+                self.get_logger().error('If you are experiencing ONNX Split node parse errors, please run: pip3 install onnxruntime')
+                sys.exit(1)
 
         # 订阅小车深度/彩色相机的彩色图
         self.image_sub = self.create_subscription(
@@ -151,11 +175,23 @@ class YoloDetectorNode(Node):
         blob = cv2.dnn.blobFromImage(cv_image, 1.0 / 255.0, (640, 640), swapRB=True, crop=False)
 
         # 3. 前向推理
-        self.net.setInput(blob)
-        outputs = self.net.forward()  # outputs shape: (1, 25200, 85) 或 (25200, 85)
+        if self.use_ort:
+            try:
+                outputs = self.ort_session.run(None, {self.ort_input_name: blob})
+                predictions = np.squeeze(outputs[0])
+            except Exception as e:
+                self.get_logger().error(f'ONNX Runtime inference failed: {str(e)}')
+                return
+        else:
+            try:
+                self.net.setInput(blob)
+                outputs = self.net.forward()  # outputs shape: (1, 25200, 85) 或 (25200, 85)
+                predictions = np.squeeze(outputs)
+            except Exception as e:
+                self.get_logger().error(f'OpenCV DNN inference failed: {str(e)}')
+                return
 
         # 4. 高效解析输出（NumPy 向量化加速过滤）
-        predictions = np.squeeze(outputs)
         if len(predictions.shape) == 1:
             predictions = np.expand_dims(predictions, axis=0)
 
