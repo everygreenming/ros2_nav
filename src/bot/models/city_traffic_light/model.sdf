@@ -14,7 +14,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://city_traffic_light/meshes/city_traffic_light.glb</uri>
+            <uri>model://city_traffic_light/meshes/city_traffic_light/result.dae</uri>
           </mesh>
         </geometry>
       </visual>
