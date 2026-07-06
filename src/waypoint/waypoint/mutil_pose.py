@@ -63,20 +63,10 @@ class PatrolNode(BasicNavigator):
         """
         初始化机器人位姿
         """
-        # 1. 先等待 Nav2 系统完全启动并处于 Active 状态
-        self.get_logger().info('正在等待 Nav2 导航及定位生命周期节点激活...')
-        self.waitUntilNav2Active()
-        
-        # 2. 系统就绪后，再下发初始位姿，确保 AMCL 节点已经启动完毕并能接收到该位姿
         self.initial_point_ = self.get_parameter('initial_point').value
-        self.get_logger().info(f'发送初始位姿: x={self.initial_point_[0]}, y={self.initial_point_[1]}')
         self.setInitialPose(self.get_pose_by_xyyaw(
             self.initial_point_[0], self.initial_point_[1], self.initial_point_[2]))
-        
-        # 3. 延时 3 秒给 AMCL 留出定位粒子收敛和建立 map->odom 坐标变换的时间
-        import time
-        self.get_logger().info('等待 3 秒以使定位（AMCL）收敛...')
-        time.sleep(3.0)
+        self.waitUntilNav2Active()
 
     def get_target_points_list(self):
         """
