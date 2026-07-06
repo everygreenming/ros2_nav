@@ -29,6 +29,12 @@
               <uri>model://construction_cone/meshes/construction_cone.dae</uri>
             </mesh>
           </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Blue</name>
+            </script>
+          </material>
         </visual>
       </link>
     </model>
