@@ -6,7 +6,7 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <sphere radius="0.08" />
+                    <sphere radius="0.03" />
                 </geometry>
                 <material name="black">
                     <color rgba="0.0 0.0 0.0 0.8"/>
@@ -15,13 +15,13 @@
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <sphere radius="0.08" />
+                    <sphere radius="0.03" />
                 </geometry>
                 <material name="black">
                     <color rgba="0.0 0.0 0.0 0.8"/>
                 </material>
             </collision>
-            <xacro:sphere_inertia m="0.05" r="0.08" />
+            <xacro:sphere_inertia m="0.02" r="0.03" />
         </link>
         <gazebo reference="${caster_name}_caster_link">
             <mu1 value="0.0" />

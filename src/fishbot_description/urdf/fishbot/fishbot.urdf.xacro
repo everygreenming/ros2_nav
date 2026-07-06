@@ -17,7 +17,7 @@
     <!-- 执行器：两轮驱动 + 单后万向轮 -->
     <xacro:wheel_xacro wheel_name="left" xyz="0.0 0.18 -0.10" radius="0.08" length="0.06" />
     <xacro:wheel_xacro wheel_name="right" xyz="0.0 -0.18 -0.10" radius="0.08" length="0.06" />
-    <xacro:caster_xacro caster_name="rear" xyz="-0.30 0.0 -0.10" />
+    <xacro:caster_xacro caster_name="rear" xyz="-0.30 0.0 -0.15" />
     <!-- Gazebo 插件 -->
     <xacro:include filename="$(find fishbot_description)/urdf/fishbot/plugins/gazebo_control_plugin.xacro" />
     <xacro:gazebo_control_plugin />
