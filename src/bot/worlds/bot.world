@@ -64,28 +64,10 @@
       </link>
     </model>
 
-  <model name="traffic_light_pillar">
-      <static>true</static>
-      
-      <!-- 向外移动一点(X变小为11.5，Y变小为1.0以远离y=2.5的障碍物)，并且Z轴下移为0 -->
-      <pose>11.5 1.0 0 0 0 0</pose> 
-      
-      <link name="link">
-        <collision name="collision">
-          <!-- 放宽碰撞体，防止模型太大卡住小车。如果不需要碰撞也可以整段删掉 -->
-          <geometry><cylinder><radius>0.4</radius><length>2.0</length></cylinder></geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <!-- 使用Gazebo标准模型路径 -->
-              <uri>model://city_traffic_light/meshes/city_traffic_light.glb</uri>
-              <!-- 如果模型过大或过小，可以取消注释并修改下方缩放比例 -->
-              <!-- <scale>1 1 1</scale> -->
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
-    </model>
+    <include>
+      <name>traffic_light_pillar</name>
+      <uri>model://city_traffic_light</uri>
+      <pose>11.5 1.0 0 0 0 0</pose>
+    </include>
   </world>
 </sdf>
