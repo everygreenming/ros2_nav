@@ -68,15 +68,15 @@ source install/setup.bash       # 如果是 Linux 终端 (bash)
 如果您希望同时开启仿真环境、加载地图以及启动导航系统与 RViz，可以在终端中直接运行：
 ```bash
 # 启动仿真环境 + Nav2 导航系统 + RViz 界面
-ros2 launch gazebo total_launch.py
+ros2 launch final total_launch.py
 ```
 *   **若想启动的同时自动开启多点巡航**，可以加上 `start_patrol:=true` 参数：
     ```bash
-    ros2 launch gazebo total_launch.py start_patrol:=true
+    ros2 launch final total_launch.py start_patrol:=true
     ```
 *   **若想指定加载其他地图**，可以使用 `map` 参数：
     ```bash
-    ros2 launch gazebo total_launch.py map:=/path/to/your/map.yaml
+    ros2 launch final total_launch.py map:=/path/to/your/map.yaml
     ```
 
 ### 选项 2：模块化逐步启动
@@ -113,10 +113,13 @@ ros2 launch waypoint pose_launch.py nav_mode:=follow
 
 ```text
 bot_ws/src/
-├── gazebo/                           # Gazebo 仿真世界与启动包
+├── final/                            # 核心一键集成启动包
+│   └── launch/
+│       └── total_launch.py           # 一键启动总入口 (同时拉起仿真、导航和巡航)
+│
+├── gazebo/                           # Gazebo 仿真世界与资源包
 │   ├── launch/
-│   │   ├── sim.launch.py             # 仿真总启动脚本 (加载小车模型与仿真环境)
-│   │   └── total_launch.py           # 一键启动脚本 (同时启动仿真环境和 Nav2 导航系统)
+│   │   └── sim.launch.py             # 仿真启动脚本 (加载小车模型与环境)
 │   ├── models/bot_map/               # 仿真地图模型文件 (包含 map.stl 及纹理配置) 
 │   └── worlds/
 │       └── bot.world                 # 核心物理世界场景定义 
