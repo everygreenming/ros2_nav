@@ -210,10 +210,12 @@ colcon build --packages-select bot_nav2
 ```
 ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
 ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
-[INFO] [1783328214.910024121] [yolo_detector]: Initializing yolov5_ros object detection node...
-[INFO] [1783328214.911151036] [yolo_detector]: Loading custom classes: ['blue_cone', 'parking_sign']
-[INFO] [1783328214.911571819] [yolo_detector]: Loading ONNX model: /home/everygreen/ros2/bot_ws/install/yolov5_ros/share/yolov5_ros/models/best.onnx
+[INFO] [1783328823.176108092] [yolo_detector]: Initializing yolov5_ros object detection node...
+[INFO] [1783328823.177211226] [yolo_detector]: Loading custom classes: ['blue_cone', 'parking_sign']
+[INFO] [1783328823.177833655] [yolo_detector]: Loading ONNX model: /home/everygreen/ros2/bot_ws/install/yolov5_ros/share/yolov5_ros/models/best.onnx
 [ERROR:0] global ./modules/dnn/src/onnx/onnx_importer.cpp (718) handleNode DNN/ONNX: ERROR during processing node with 2 inputs and 3 outputs: [Split]:(/model.24/Split_output_0)
-[ERROR] [1783328214.967649187] [yolo_detector]: Failed to load ONNX model: OpenCV(4.5.4) ./modules/dnn/src/onnx/onnx_importer.cpp:739: error: (-2:Unspecified error) in function 'handleNode'
+[ERROR] [1783328823.194108993] [yolo_detector]: Failed to load ONNX model: OpenCV(4.5.4) ./modules/dnn/src/onnx/onnx_importer.cpp:739: error: (-2:Unspecified error) in function 'handleNode'
 > Node [Split]:(/model.24/Split_output_0) parse error: OpenCV(4.5.4) ./modules/dnn/src/layers/slice_layer.cpp:217: error: (-215:Assertion failed) splits > 0 && inpShape[axis_rw] % splits == 0 in function 'getMemoryShapes'
+> 
 [ros2run]: Process exited with failure 1
+
