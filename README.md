@@ -208,3 +208,4 @@ ros2 run nav2_map_server map_saver_cli -f ~/Desktop/bot_ws/src/bot_nav2/maps/bot
 ```bash
 colcon build --packages-select bot_nav2
 ```
+ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'red_light', 'green_light']"
