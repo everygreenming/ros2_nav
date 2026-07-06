@@ -7,8 +7,8 @@ local_costmap:
       robot_base_frame: base_link
       use_sim_time: True
       rolling_window: true
-      width: 3
-      height: 3
+      width: 6
+      height: 6
       resolution: 0.05
       footprint: "[ [0.15, 0.255], [0.15, -0.255], [-0.40, -0.255], [-0.40, 0.255] ]"
       plugins: ["voxel_layer", "inflation_layer"]
