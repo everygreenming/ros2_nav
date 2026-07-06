@@ -16,8 +16,17 @@ class ImageCollectorNode(Node):
         # 声明采集周期（单位：秒，默认 0.5s）与保存路径
         self.declare_parameter('save_interval', 0.5)
         
-        # 默认保存在虚拟机桌面工作空间下的 dataset_raw 文件夹里
-        default_dir = os.path.expanduser('~/Desktop/bot_ws/dataset_raw')
+        # 动态寻找工作空间根目录（通过往上级目录查找包含 src 文件夹的目录）
+        # 这样无论在物理机、无桌面虚拟机构建、还是通过软链接安装都能自动定位到工作空间根目录，防止硬编码 Desktop
+        ws_root = os.path.expanduser('~')
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        while current_dir and current_dir != os.path.dirname(current_dir):
+            if os.path.exists(os.path.join(current_dir, 'src')):
+                ws_root = current_dir
+                break
+            current_dir = os.path.dirname(current_dir)
+            
+        default_dir = os.path.join(ws_root, 'dataset_raw')
         self.declare_parameter('save_dir', default_dir)
         
         self.save_interval = self.get_parameter('save_interval').value
