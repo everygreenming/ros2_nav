@@ -43,6 +43,8 @@ class PatrolNode(BasicNavigator):
         """
         pose = PoseStamped()
         pose.header.frame_id = 'map'
+        # 填充实时时间戳（在 ROS 2 中至关重要，时间戳为零的消息会被 AMCL 丢弃）
+        pose.header.stamp = self.get_clock().now().to_msg()
         pose.pose.position.x = x
         pose.pose.position.y = y
         rotation_quat = quaternion_from_euler(0, 0, yaw)
