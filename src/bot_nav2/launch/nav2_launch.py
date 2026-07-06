@@ -26,8 +26,12 @@ def generate_launch_description():
     bot_nav2_dir = get_package_share_directory('bot_nav2')
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
     
-    # 默认使用 nav2 官方的 rviz 配置，省得我们自己一个个添加图层
-    rviz_config_dir = os.path.join(nav2_bringup_dir, 'rviz', 'nav2_default_view.rviz')
+    # 优先加载 bot_nav2 包下的自定义 rviz 配置，如果不存在则退回官方 default
+    custom_rviz_config_dir = os.path.join(bot_nav2_dir, 'rviz', 'nav2.rviz')
+    if os.path.exists(custom_rviz_config_dir):
+        rviz_config_dir = custom_rviz_config_dir
+    else:
+        rviz_config_dir = os.path.join(nav2_bringup_dir, 'rviz', 'nav2_default_view.rviz')
     
     # 2. 动态解析自定义行为树路径（关键改动）
     bt_xml_path = os.path.join(

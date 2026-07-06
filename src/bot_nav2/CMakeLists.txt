@@ -26,6 +26,7 @@ install(DIRECTORY
 install(DIRECTORY
   maps
   behavior_trees
+  rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
