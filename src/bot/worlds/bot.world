@@ -67,21 +67,23 @@
   <model name="traffic_light_pillar">
       <static>true</static>
       
-      <pose>12.07 1.42 0.4 0 0 0</pose> 
+      <!-- 向外移动一点(X变小为11.5，Y变小为1.0以远离y=2.5的障碍物)，并且Z轴下移为0 -->
+      <pose>11.5 1.0 0 0 0 0</pose> 
       
       <link name="link">
         <collision name="collision">
-          <geometry><cylinder><radius>0.05</radius><length>0.8</length></cylinder></geometry>
+          <!-- 放宽碰撞体，防止模型太大卡住小车。如果不需要碰撞也可以整段删掉 -->
+          <geometry><cylinder><radius>0.4</radius><length>2.0</length></cylinder></geometry>
         </collision>
-        <visual name="base_visual">
-          <geometry><cylinder><radius>0.05</radius><length>0.8</length></cylinder></geometry>
-          <material><ambient>0.1 0.1 0.1 1</ambient></material> 
-        </visual>
-        
-        <visual name="light_visual">
-          <pose>0 0 0.35 0 0 0</pose>
-          <geometry><cylinder><radius>0.055</radius><length>0.1</length></cylinder></geometry>
-          <material><ambient>1.0 0.0 0.0 1</ambient></material> 
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <!-- 使用相对路径，相对于当前bot.world文件所在的worlds目录 -->
+              <uri>file://../models/city_traffic_light.glb</uri>
+              <!-- 如果模型过大或过小，可以取消注释并修改下方缩放比例 -->
+              <!-- <scale>1 1 1</scale> -->
+            </mesh>
+          </geometry>
         </visual>
       </link>
     </model>
