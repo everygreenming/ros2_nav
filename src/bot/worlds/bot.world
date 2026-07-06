@@ -78,8 +78,8 @@
         <visual name="visual">
           <geometry>
             <mesh>
-              <!-- 使用相对路径，相对于当前bot.world文件所在的worlds目录 -->
-              <uri>file://../models/city_traffic_light.glb</uri>
+              <!-- 使用Gazebo标准模型路径 -->
+              <uri>model://city_traffic_light/meshes/city_traffic_light.glb</uri>
               <!-- 如果模型过大或过小，可以取消注释并修改下方缩放比例 -->
               <!-- <scale>1 1 1</scale> -->
             </mesh>
