@@ -170,3 +170,41 @@ bot_ws/src/
 ## 特别说明
 * 由于比赛中将使用实车，所以小车采用的是鱼香ros提供的开源代码，但是对激光雷达安装位置进行了降低，从而更好地实现避障。并将里程计来源更改为gazebo坐标系，使定位更精准。同时提高了小车的扭矩，提升了速度性能，完成导航项目大概在24s左右，仿真数据显示速度基本在1.5m/s左右。
 * 由于gazebo中的锥桶底部是方形，导致小车在高速下，进行极端避障测试时（设置离锥桶很近的导航点）会出现小车撞到锥桶底座的情况，由于物理限制，激光雷达高度不能再低，所以将锥桶的碰撞箱更改为矩形，从而实现更好的避障。（或者采用深度相机，进行辅助避障；将yolo部署到小车中等方法）。
+
+---
+
+## 重新建图与保存步骤（SLAM）
+
+如果您调整了环境中的障碍物（如锥桶或红绿灯的位置/大小），需要运行以下步骤重新构建并更新 2D 静态地图：
+
+### 1. 启动 Gazebo 仿真环境 (终端 1)
+```bash
+ros2 launch bot sim.launch.py
+```
+
+### 2. 启动 SLAM 建图节点 (终端 2)
+```bash
+ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true
+```
+
+### 3. 启动 RViz2 可视化界面 (终端 3)
+```bash
+ros2 run rviz2 rviz2 -d $(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_view.rviz
+```
+
+### 4. 启动键盘控制小车建图 (终端 4)
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+*(使用键盘控制小车在仿真环境中缓慢行驶，扫描完全部的障碍物和边界)*
+
+### 5. 保存地图 (终端 5)
+建图完成后，运行以下命令保存地图（会自动覆盖 `src/bot_nav2/maps/` 下的旧地图）：
+```bash
+ros2 run nav2_map_server map_saver_cli -f ~/Desktop/bot_ws/src/bot_nav2/maps/bot_map
+```
+
+### 6. 重新编译工作空间以刷新地图安装文件
+```bash
+colcon build --packages-select bot_nav2
+```
