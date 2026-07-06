@@ -208,4 +208,21 @@ ros2 run nav2_map_server map_saver_cli -f ~/Desktop/bot_ws/src/bot_nav2/maps/bot
 ```bash
 colcon build --packages-select bot_nav2
 ```
-ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'red_light', 'green_light']"
+ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
+ ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
+[INFO] [1783327999.396856048] [yolo_detector]: Initializing yolov5_ros object detection node...
+Traceback (most recent call last):
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/yolov5_ros/yolo_detector", line 33, in <module>
+    sys.exit(load_entry_point('yolov5-ros==0.0.0', 'console_scripts', 'yolo_detector')())
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/python3.10/site-packages/yolov5_ros/yolo_detector.py", line 251, in main
+    node = YoloDetectorNode()
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/python3.10/site-packages/yolov5_ros/yolo_detector.py", line 36, in __init__
+    self.declare_parameter('classes', [])
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/node.py", line 367, in declare_parameter
+    return self.declare_parameters('', [args], ignore_override)[0]
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/node.py", line 493, in declare_parameters
+    self._set_parameters(
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/node.py", line 738, in _set_parameters
+    raise InvalidParameterTypeException(
+rclpy.exceptions.InvalidParameterTypeException: Trying to set parameter 'classes' to '['blue_cone', 'parking_sign']' of type 'STRING_ARRAY', expecting type 'BYTE_ARRAY'
+[ros2run]: Process exited with failure 1
