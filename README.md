@@ -209,13 +209,45 @@ ros2 run nav2_map_server map_saver_cli -f ~/Desktop/bot_ws/src/bot_nav2/maps/bot
 colcon build --packages-select bot_nav2
 ```
 ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
-ros2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign']"
-[INFO] [1783328823.176108092] [yolo_detector]: Initializing yolov5_ros object detection node...
-[INFO] [1783328823.177211226] [yolo_detector]: Loading custom classes: ['blue_cone', 'parking_sign']
-[INFO] [1783328823.177833655] [yolo_detector]: Loading ONNX model: /home/everygreen/ros2/bot_ws/install/yolov5_ros/share/yolov5_ros/models/best.onnx
-[ERROR:0] global ./modules/dnn/src/onnx/onnx_importer.cpp (718) handleNode DNN/ONNX: ERROR during processing node with 2 inputs and 3 outputs: [Split]:(/model.24/Split_output_0)
-[ERROR] [1783328823.194108993] [yolo_detector]: Failed to load ONNX model: OpenCV(4.5.4) ./modules/dnn/src/onnx/onnx_importer.cpp:739: error: (-2:Unspecified error) in function 'handleNode'
-> Node [Split]:(/model.24/Split_output_0) parse error: OpenCV(4.5.4) ./modules/dnn/src/layers/slice_layer.cpp:217: error: (-215:Assertion failed) splits > 0 && inpShape[axis_rw] % splits == 0 in function 'getMemoryShapes'
-> 
+os2 run yolov5_ros yolo_detector --ros-args -p model_path:=best.onnx -p "classes:=['blue_cone', 'parking_sign','traffic_light']"
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.6 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/yolov5_ros/yolo_detector", line 33, in <module>
+    sys.exit(load_entry_point('yolov5-ros==0.0.0', 'console_scripts', 'yolo_detector')())
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/yolov5_ros/yolo_detector", line 25, in importlib_load_entry_point
+    return next(matches).load()
+  File "/usr/lib/python3.10/importlib/metadata/__init__.py", line 171, in load
+    module = import_module(match.group('module'))
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/python3.10/site-packages/yolov5_ros/yolo_detector.py", line 7, in <module>
+    import cv2
+AttributeError: _ARRAY_API not found
+Traceback (most recent call last):
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/yolov5_ros/yolo_detector", line 33, in <module>
+    sys.exit(load_entry_point('yolov5-ros==0.0.0', 'console_scripts', 'yolo_detector')())
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/yolov5_ros/yolo_detector", line 25, in importlib_load_entry_point
+    return next(matches).load()
+  File "/usr/lib/python3.10/importlib/metadata/__init__.py", line 171, in load
+    module = import_module(match.group('module'))
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/everygreen/ros2/bot_ws/install/yolov5_ros/lib/python3.10/site-packages/yolov5_ros/yolo_detector.py", line 7, in <module>
+    import cv2
+ImportError: numpy.core.multiarray failed to import
 [ros2run]: Process exited with failure 1
 
