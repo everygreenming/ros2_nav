@@ -1,15 +1,14 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
-    <!-- 让 Gazebo 视角跟随小车背后上方 -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
         <track_visual>
-          <name>bot</name> <!-- 追踪的小车实体名称 -->
+          <name>bot</name> 
           <static>true</static>
           <use_model_frame>true</use_model_frame>
-          <xyz>-1.8 0 3.0</xyz> <!-- 相机在小车局部坐标系下的相对位置：后方1.8m，上方0.9m -->
-          <inherit_orientation>true</inherit_orientation> <!-- 继承旋转朝向，随小车转弯 -->
+          <xyz>-1.8 0 3.0</xyz> 
+          <inherit_orientation>true</inherit_orientation>
         </track_visual>
       </camera>
     </gui>
@@ -25,7 +24,6 @@
       <static>true</static>
       <pose>9.3 2.5 0.05 0 0 0</pose>
       <link name="link">
-        <!-- 1. 方形底座物理碰撞体（宽35cm，高60cm，容错雷达高度，使得雷达一定能扫出方形轮廓，且物理上能够阻挡小车） -->
         <collision name="box_collision">
           <pose>0 0 0.3 0 0 0</pose>
           <geometry>
@@ -34,7 +32,6 @@
             </box>
           </geometry>
         </collision>
-        <!-- 2. 视觉外观（依然加载原本好看的锥桶三维模型） -->
         <visual name="visual">
           <geometry>
             <mesh>

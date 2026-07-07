@@ -8,7 +8,7 @@ from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 
 def generate_launch_description():
-    # 获取各个功能包的 share 路径
+    # 获取包路径
     gazebo_pkg_dir = get_package_share_directory('gazebo')
     nav2_pkg_dir = get_package_share_directory('nav2')
     waypoint_pkg_dir = get_package_share_directory('waypoint')
@@ -19,30 +19,28 @@ def generate_launch_description():
         'map', default=os.path.join(nav2_pkg_dir, 'maps', 'bot_map.yaml'))
     start_patrol = LaunchConfiguration('start_patrol', default='false')
 
-    # 声明命令行参数
+    # 声明对外参数接口
     declare_use_sim_time = DeclareLaunchArgument(
         'use_sim_time', default_value='true',
-        description='Use simulation (Gazebo) clock if true'
+        description='Use simulation clock if true'
     )
-    
     declare_map = DeclareLaunchArgument(
         'map', default_value=map_yaml_path,
         description='Full path to map file to load'
     )
-
     declare_start_patrol = DeclareLaunchArgument(
         'start_patrol', default_value='false',
-        description='Whether to start the waypoint patrol node automatically (true/false)'
+        description='Whether to start the waypoint patrol node automatically'
     )
 
-    # 1. 启动 Gazebo 仿真环境
+    # 1. 启动物理仿真层
     launch_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(gazebo_pkg_dir, 'launch', 'sim.launch.py')
         )
     )
 
-    # 2. 启动 Nav2 导航框架与 RViz2 可视化
+    # 2. 启动导航算法层
     launch_nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(nav2_pkg_dir, 'launch', 'nav2_launch.py')
@@ -53,7 +51,7 @@ def generate_launch_description():
         }.items()
     )
 
-    # 3. 启动多点巡航脚本（按需，默认关闭）
+    # 3. 按需启动应用巡航层
     launch_waypoint = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(waypoint_pkg_dir, 'launch', 'pose_launch.py')
